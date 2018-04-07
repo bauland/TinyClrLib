@@ -1,7 +1,13 @@
+# Type of files to ignore
 *.suo
 *.user
+*.html
+
+# Remove some specific folders
 /.vs/
 /packages/
 /_ReSharper.Caches/
+
+# Remove all binaries folders
 bin/
 obj/

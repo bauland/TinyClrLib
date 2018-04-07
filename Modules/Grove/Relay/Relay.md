@@ -1,5 +1,5 @@
 # Grove Relay modules
-Version: __0.9.0__
+Version: __0.10.0__
 
 ## Connections ##
 Grove Relay is connected as followed on [Netduino3](http://developer.wildernesslabs.co/Netduino/About/):
