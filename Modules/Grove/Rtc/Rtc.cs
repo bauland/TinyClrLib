@@ -1,4 +1,5 @@
-﻿using GHIElectronics.TinyCLR.Devices.I2c;
+﻿using System;
+using GHIElectronics.TinyCLR.Devices.I2c;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -63,6 +64,16 @@ namespace Bauland.Grove
         /// Set true to use AM/PM mode, false to use 24 Hrs mode
         /// </summary>
         public bool AmPmMode;
+
+        /// <summary>
+        /// Get Date and Time from rtc in DateTime format (call GetTime() first)
+        /// </summary>
+        public DateTime DateTime => new DateTime(Year, Month, Day, Hours, Minutes, Seconds);
+
+        /// <summary>
+        /// Gets the number of ticks that represent the date and time 
+        /// </summary>
+        public ulong Ticks => (ulong)DateTime.Ticks;
 
         /// <summary>
         /// Constructor of Rtc component
