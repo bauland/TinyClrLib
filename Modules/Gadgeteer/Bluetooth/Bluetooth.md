@@ -1,5 +1,5 @@
 # Bluetooth module
-Version: __0.10.0__
+Version: __0.11.0__
 
 ## Connections ##
 Bluetooth is connected as followed on [FEZSpider](http://docs.ghielectronics.com/hardware/legacy_products/gadgeteer/fez_spider.html):
