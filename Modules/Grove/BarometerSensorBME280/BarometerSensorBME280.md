@@ -1,5 +1,5 @@
 # Grove BarometerSensorBME280 modules
-Version: __0.11.0__
+Version: __0.12.0__
 
 ## Connections ##
 Grove BarometerSensorBME280 is connected as followed on [Netduino3](http://developer.wildernesslabs.co/Netduino/About/):

@@ -13,7 +13,7 @@
     <copyright>Copyright 2017</copyright>
     <tags>TinyClr Gadgeteer Led Led7C 7C</tags>
     <dependencies>
-      <dependency id="GHIElectronics.TinyCLR.Core" version="[0.11.0, 0.12.0)" />
+      <dependency id="GHIElectronics.TinyCLR.Core" version="[0.12.0, 0.13.0)" />
     </dependencies>
   </metadata>
   <files>

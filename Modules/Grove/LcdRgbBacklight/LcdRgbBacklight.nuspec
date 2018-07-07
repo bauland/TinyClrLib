@@ -13,7 +13,7 @@
     <copyright>Copyright 2017</copyright>
     <tags>TinyClr Grove LcdRgbBacklight Ranger</tags>
     <dependencies>
-      <dependency id="GHIElectronics.TinyCLR.Core" version="[0.11.0, 0.12.0)" />
+      <dependency id="GHIElectronics.TinyCLR.Core" version="[0.12.0, 0.13.0)" />
     </dependencies>
   </metadata>
   <files>

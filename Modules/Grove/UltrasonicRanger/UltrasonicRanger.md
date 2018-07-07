@@ -1,5 +1,5 @@
 # UltrasonicRanger Grove module
-Version: __0.11.0__
+Version: __0.12.0__
 
 ## Connections ##
 UltrasonicRanger is connected as followed on [Electron](http://www.ingenuitymicro.com/products/electron/):

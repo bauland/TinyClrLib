@@ -1,5 +1,5 @@
 # Grove I2cColorSensor modules
-Version: __0.11.0__
+Version: __0.12.0__
 
 ## Connections ##
 Grove I2cColorSensor is connected as followed on [FEZ Panda III](https://old.ghielectronics.com/catalog/product/474):

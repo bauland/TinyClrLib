@@ -1,5 +1,5 @@
 # Music modules
-Version: __0.11.0__
+Version: __0.12.0__
 
 ## Connections ##
 Music is connected as followed on [FEZSpiderII](http://docs.ghielectronics.com/hardware/legacy_products/gadgeteer/fez_spider_ii.html):
