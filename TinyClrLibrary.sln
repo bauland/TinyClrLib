@@ -103,7 +103,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialBluetooth3", "Modules
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thumb_Joystick", "Modules\Grove\Thumb_Joystick\Thumb_Joystick.csproj", "{6552460C-727D-41E5-AD4D-03986D7073B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedStrip_APA102", "Modules\Others\LedStrip_APA102\LedStrip_APA102.csproj", "{40DD0ECA-3ECF-4739-BA69-23A03D24137A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedStrip", "Modules\Others\LedStrip_APA102\LedStrip_APA102.csproj", "{40DD0ECA-3ECF-4739-BA69-23A03D24137A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
