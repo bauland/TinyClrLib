@@ -78,7 +78,7 @@ Bluetooth LE P module | :construction: |             | Not yet
 
 Module          | State       | Package                                                                                 | Documentation
 --------------- | ----------- | --------------------------------------------------------------------------------------- | -------------
-HC-SR04         | __Working__ | [Package](https://www.bauland.fr/Nuget/Download?Path=Bauland.Other.HCSR04.0.12.0.nupkg) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Others/HCSR04/HC-SR04.md)
+HC-SR04         | __Working__ | [Package](https://www.bauland.fr/Nuget/Download?Path=Bauland.Others.HCSR04.0.12.0.nupkg) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Others/HCSR04/HC-SR04.md)
 LedStrip        | __Working__ | [Package](https://www.bauland.fr/Nuget/Download?Path=Bauland.Others.LedStrip.0.12.0.nupkg) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Others/LedStrip_APA102/LedStrip.md)
 LedStripEffects | __Working__ | [Package](https://www.bauland.fr/Nuget/Download?Path=Bauland.Others.LedStripEffects.0.12.0.nupkg) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Others/LedStripEffects/LedStripEffects.md)
 
