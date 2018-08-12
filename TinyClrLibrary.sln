@@ -103,6 +103,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialBluetooth3", "Modules
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thumb_Joystick", "Modules\Grove\Thumb_Joystick\Thumb_Joystick.csproj", "{6552460C-727D-41E5-AD4D-03986D7073B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedStrip_APA102", "Modules\Others\LedStrip_APA102\LedStrip_APA102.csproj", "{40DD0ECA-3ECF-4739-BA69-23A03D24137A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -261,6 +263,10 @@ Global
 		{6552460C-727D-41E5-AD4D-03986D7073B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6552460C-727D-41E5-AD4D-03986D7073B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6552460C-727D-41E5-AD4D-03986D7073B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40DD0ECA-3ECF-4739-BA69-23A03D24137A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40DD0ECA-3ECF-4739-BA69-23A03D24137A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40DD0ECA-3ECF-4739-BA69-23A03D24137A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40DD0ECA-3ECF-4739-BA69-23A03D24137A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -308,6 +314,7 @@ Global
 		{7F07F5B6-0E91-4C6E-A1C1-795AD8D08ADC} = {909B1F40-DF80-403C-B729-A1502DB38AC9}
 		{8D80E58F-94FC-4F99-AAE4-B8ECAB3F4EB5} = {909B1F40-DF80-403C-B729-A1502DB38AC9}
 		{6552460C-727D-41E5-AD4D-03986D7073B8} = {909B1F40-DF80-403C-B729-A1502DB38AC9}
+		{40DD0ECA-3ECF-4739-BA69-23A03D24137A} = {CBC8DD28-C854-4412-ADBD-2A60DD0707F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFE8F872-04F4-4FB3-97A0-0280C96B9F74}
