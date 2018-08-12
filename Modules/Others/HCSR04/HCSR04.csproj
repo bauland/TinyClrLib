@@ -8,8 +8,8 @@
     <ProjectGuid>{3A949AA1-38A2-4D30-A48B-D9DEAACB249F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bauland.Other</RootNamespace>
-    <AssemblyName>Bauland.Other.HCSR04</AssemblyName>
+    <RootNamespace>Bauland.Others</RootNamespace>
+    <AssemblyName>Bauland.Others.HCSR04</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A1948822-69DD-4150-919B-F3F42EFB71CC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Bauland.Other.HCSR04.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Bauland.Others.HCSR04.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Bauland.Other.HCSR04.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Bauland.Others.HCSR04.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\SharedAssemblyInfo.cs">
