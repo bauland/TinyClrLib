@@ -17,8 +17,8 @@
     </dependencies>
   </metadata>
   <files>
-    <!-- Add documentation and image
-    <file src="HC-SR04.html" target="" />
-    <file src="HC-SR04-Electron.jpg" target="" /> -->
+    <!-- Add documentation and image-->
+    <file src="LedStrip.html" target="" />
+    <file src="LedStrip-Electron.jpg" target="" />
   </files>
 </package>

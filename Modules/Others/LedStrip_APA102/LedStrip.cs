@@ -46,6 +46,7 @@ namespace Bauland.Others
         /// <param name="order">Order of colors</param>
         public LedStrip(int size, string spiBus, int chipSelect, ColorOrder order)
         {
+            if (size < 1) throw new ArgumentOutOfRangeException(nameof(size), "must be greater than 0");
             Size = size;
             _leds = new Led[size];
             for (int i = 0; i < size; i++)
@@ -80,9 +81,9 @@ namespace Bauland.Others
         /// <param name="green">Value of green for LED color</param>
         /// <param name="blue">Value of blue for LED color</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public void SetPixel(uint index, byte brightness, byte red, byte green, byte blue)
+        public void SetPixel(int index, byte brightness, byte red, byte green, byte blue)
         {
-            if (index >= Size) throw new ArgumentOutOfRangeException(nameof(index), "n must be between 0 and Size - 1.");
+            if (index < 0 || index >= Size) throw new ArgumentOutOfRangeException(nameof(index), "n must be between 0 and Size - 1.");
             var led = _leds[index];
             led.Red = red;
             led.Green = green;

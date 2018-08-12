@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="HC-SR04.md" />
-    <None Include="HCSR04.nuspec" />
+    <None Include="HCSR04.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

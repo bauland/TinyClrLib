@@ -43,6 +43,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LedStrip.md" />
     <None Include="LedStrip_APA102.nuspec">
       <SubType>Designer</SubType>
     </None>
@@ -52,6 +53,12 @@
     <Reference Include="GHIElectronics.TinyCLR.Devices, Version=0.12.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\GHIElectronics.TinyCLR.Devices.0.12.0\lib\net452\GHIElectronics.TinyCLR.Devices.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LedStrip.html">
+      <DependentUpon>LedStrip.md</DependentUpon>
+    </Content>
+    <Content Include="LedStrip-Electron.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
