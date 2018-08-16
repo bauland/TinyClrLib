@@ -103,22 +103,22 @@ namespace Bauland.Gadgeteer
             _read2 = new byte[2];
             _read4 = new byte[4];
 
-            _enable = GpioController.GetDefault().OpenPin(pinEnable, GpioSharingMode.Exclusive);
+            _enable = GpioController.GetDefault().OpenPin(pinEnable);
             _enable.SetDriveMode(GpioPinDriveMode.Output);
             _enable.Write(GpioPinValue.High);
 
-            _cs = GpioController.GetDefault().OpenPin(pinChipSelect, GpioSharingMode.Exclusive);
+            _cs = GpioController.GetDefault().OpenPin(pinChipSelect);
             _cs.SetDriveMode(GpioPinDriveMode.Output);
             _cs.Write(GpioPinValue.High);
 
-            _mosi = GpioController.GetDefault().OpenPin(pinMosi, GpioSharingMode.Exclusive);
+            _mosi = GpioController.GetDefault().OpenPin(pinMosi);
             _mosi.SetDriveMode(GpioPinDriveMode.Output);
             _mosi.Write(GpioPinValue.Low);
 
-            _miso = GpioController.GetDefault().OpenPin(pinMiso, GpioSharingMode.Exclusive);
+            _miso = GpioController.GetDefault().OpenPin(pinMiso);
             _miso.SetDriveMode(GpioPinDriveMode.Input);
 
-            _clock = GpioController.GetDefault().OpenPin(pinClock, GpioSharingMode.Exclusive);
+            _clock = GpioController.GetDefault().OpenPin(pinClock);
             _clock.SetDriveMode(GpioPinDriveMode.Output);
             _clock.Write(GpioPinValue.Low);
 

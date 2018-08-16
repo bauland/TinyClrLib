@@ -12,7 +12,7 @@ namespace Bauland.Gadgeteer
     /// </summary>
     public class Tunes
     {
-        private readonly PwmPin _pwmPin;
+        private readonly PwmChannel _pwmPin;
         private readonly Queue _playlist;
         private Thread _worker;
         private readonly object _syncRoot;
@@ -34,8 +34,8 @@ namespace Bauland.Gadgeteer
         /// <param name="pin">Pin number (generally pin 9 of P Socket)</param>
         public Tunes(string controller, int pin)
         {
-            PwmController ctl = PwmController.FromId(controller);
-            _pwmPin = ctl.OpenPin(pin);
+            PwmController ctl = PwmController.FromName(controller);
+            _pwmPin = ctl.OpenChannel(pin);
 
             _playlist = new Queue();
             _syncRoot = new object();

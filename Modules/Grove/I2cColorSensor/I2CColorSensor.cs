@@ -113,8 +113,8 @@ namespace Bauland.Grove
         /// <param name="i2CId">string of I2C identifier</param>
         public I2CColorSensor(string i2CId)
         {
-            I2cConnectionSettings ics = new I2cConnectionSettings(DeviceAddress) { BusSpeed = I2cBusSpeed.FastMode, SharingMode = I2cSharingMode.Shared };
-            _i2C = I2cDevice.FromId(i2CId, ics);
+            I2cConnectionSettings ics = new I2cConnectionSettings(DeviceAddress) { BusSpeed = I2cBusSpeed.FastMode };
+            _i2C = I2cController.FromName(i2CId).GetDevice(ics);
             Init();
             // WriteReg(Register.Control, 0x03);
         }

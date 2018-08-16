@@ -27,10 +27,9 @@ namespace Bauland.Grove
         public BarometerSensorBme280(string i2CId)
         {
             _coefficient = new Coefficient();
-            _sensor = I2cDevice.FromId(i2CId, new I2cConnectionSettings(Address)
+            _sensor = I2cController.FromName(i2CId).GetDevice(new I2cConnectionSettings(Address)
             {
                 BusSpeed = I2cBusSpeed.FastMode,
-                SharingMode = I2cSharingMode.Shared
             });
 
             CheckCommunication();

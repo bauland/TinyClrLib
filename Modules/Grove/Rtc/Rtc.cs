@@ -85,7 +85,7 @@ namespace Bauland.Grove
             {
                 BusSpeed = I2cBusSpeed.FastMode
             };
-            _rtcDevice = I2cDevice.FromId(i2C, settings);
+            _rtcDevice = I2cController.FromName(i2C).GetDevice(settings);
         }
 
         private byte DecToBcd(byte b)

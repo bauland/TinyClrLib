@@ -139,18 +139,16 @@ namespace Bauland.Gadgeteer
             _dreq.SetDriveMode(GpioPinDriveMode.InputPullUp);
 
             // this.spiData = GTI.SpiFactory.Create(socket, new GTI.SpiConfiguration(false, 0, 0, false, true, 2000), GTI.SpiSharing.Shared, socket, Socket.Pin.Five, this);
-            _spiData = SpiDevice.FromId(spiBusId, new SpiConnectionSettings(pin5)
+            _spiData = SpiController.FromName(spiBusId).GetDevice(new SpiConnectionSettings(pin5)
             {
                 ClockFrequency = 2000 * 1000,
-                SharingMode = SpiSharingMode.Shared,
                 DataBitLength = 8
             });
 
             // this.spiCommand = GTI.SpiFactory.Create(socket, new GTI.SpiConfiguration(false, 0, 0, false, true, 2000), GTI.SpiSharing.Shared, socket, Socket.Pin.Six, this);
-            _spiCommand = SpiDevice.FromId(spiBusId, new SpiConnectionSettings(pin6)
+            _spiCommand = SpiController.FromName(spiBusId).GetDevice( new SpiConnectionSettings(pin6)
             {
                 ClockFrequency = 2000 * 1000,
-                SharingMode = SpiSharingMode.Shared,
                 DataBitLength = 8
             });
 

@@ -9,7 +9,7 @@ namespace Bauland.Grove
     /// </summary>
     public class ServoMotor
     {
-        private readonly PwmPin _servo;
+        private readonly PwmChannel _servo;
         /// <summary>
         /// Constructor of Grove ServoMotor module
         /// </summary>
@@ -17,9 +17,9 @@ namespace Bauland.Grove
         /// <param name="pwmPinNumber">Pwm pin number of board</param>
         public ServoMotor(string controller, int pwmPinNumber)
         {
-            PwmController pwm = PwmController.FromId(controller);
+            PwmController pwm = PwmController.FromName(controller);
 
-            _servo = pwm.OpenPin(pwmPinNumber);
+            _servo = pwm.OpenChannel(pwmPinNumber);
             pwm.SetDesiredFrequency(1 / 0.020);
         }
 

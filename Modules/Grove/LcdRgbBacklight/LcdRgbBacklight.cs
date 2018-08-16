@@ -50,18 +50,16 @@ namespace Bauland.Grove
             var settings = new I2cConnectionSettings(0x7c >> 1)
             {
                 BusSpeed = I2cBusSpeed.FastMode,
-                SharingMode = I2cSharingMode.Shared
             };
 
-            _displayDevice = I2cDevice.FromId(i2CBus, settings);
+            _displayDevice = I2cController.FromName(i2CBus).GetDevice(settings);
 
             settings = new I2cConnectionSettings(0xc4 >> 1)
             {
                 BusSpeed = I2cBusSpeed.FastMode,
-                SharingMode = I2cSharingMode.Shared
             };
 
-            _backlightDevice = I2cDevice.FromId(i2CBus, settings);
+            _backlightDevice = I2cController.FromName(i2CBus).GetDevice(settings);
 
             ////////////////////////////////////
             // get the display going
