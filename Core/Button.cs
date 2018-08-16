@@ -11,7 +11,7 @@ namespace TinyClrCore
         public Button(int pinNumber)
         {
             GpioController gpio = GpioController.GetDefault();
-            _buttonPin = gpio.OpenPin(pinNumber, GpioSharingMode.Exclusive);
+            _buttonPin = gpio.OpenPin(pinNumber);
             _buttonPin.SetDriveMode(GpioPinDriveMode.Input);
             _buttonPin.ValueChanged += _buttonPin_ValueChanged;
         }

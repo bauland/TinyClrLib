@@ -62,9 +62,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>nuget pack "$(ProjectPath)" -Properties Configuration=$(ConfigurationName)
-if defined NUGET_REPOSITORY (echo NUGET_REPOSITORY is defined: %25NUGET_REPOSITORY%25) else (echo NUGET_REPOSITORY is NOT defined; exit 1)
-copy /Y "$(TargetDir)*.nupkg" "$(NUGET_REPOSITORY)"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)Modules\postbuild.bat" $(ProjectPath) $(TargetDir) $(ConfigurationName)</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AccelG248.md" />
-    <None Include="AccelG248.nuspec" />
+    <None Include="AccelG248.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

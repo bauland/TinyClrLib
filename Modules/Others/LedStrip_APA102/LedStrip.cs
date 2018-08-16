@@ -58,7 +58,7 @@ namespace Bauland.Others
                 DataBitLength = 8,
                 ClockFrequency = 10 * 1000 * 1000
             };
-            _spi = SpiDevice.FromId(spiBus, settings);
+            _spi = SpiController.FromName(spiBus).GetDevice(settings);
             PrepareStart();
             PrepareEnd();
         }

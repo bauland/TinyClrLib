@@ -118,7 +118,7 @@ namespace Bauland.Gadgeteer
             _timer.Tick += TakeMeasurement;
 
             // _i2CDevice = GTI.I2CBusFactory.Create(socket, 0x68, 100, this);
-            _i2CDevice=I2cDevice.FromId(deviceId,new I2cConnectionSettings(0x68){BusSpeed = I2cBusSpeed.StandardMode});
+            _i2CDevice = I2cController.FromName(deviceId).GetDevice(new I2cConnectionSettings(0x68) { BusSpeed = I2cBusSpeed.StandardMode });
 
             SetFullScaleRange();
         }

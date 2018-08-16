@@ -48,25 +48,25 @@ namespace Bauland.Gadgeteer
         public CharacterDisplay(int pinLcdEnable, int pinLcdReset, int pinLcdD4, int pinLcdD7, int pinLcdD5, int pinBacklight, int pinLcdD6)
         {
 
-            _lcdE = GpioController.GetDefault().OpenPin(pinLcdEnable, GpioSharingMode.Exclusive);
+            _lcdE = GpioController.GetDefault().OpenPin(pinLcdEnable);
             _lcdE.SetDriveMode(GpioPinDriveMode.Output);
 
-            _lcdRs = GpioController.GetDefault().OpenPin(pinLcdReset, GpioSharingMode.Exclusive);
+            _lcdRs = GpioController.GetDefault().OpenPin(pinLcdReset);
             _lcdRs.SetDriveMode(GpioPinDriveMode.Output);
 
-            _lcdD4 = GpioController.GetDefault().OpenPin(pinLcdD4, GpioSharingMode.Exclusive);
+            _lcdD4 = GpioController.GetDefault().OpenPin(pinLcdD4);
             _lcdD4.SetDriveMode(GpioPinDriveMode.Output);
 
-            _lcdD7 = GpioController.GetDefault().OpenPin(pinLcdD7, GpioSharingMode.Exclusive);
+            _lcdD7 = GpioController.GetDefault().OpenPin(pinLcdD7);
             _lcdD7.SetDriveMode(GpioPinDriveMode.Output);
 
-            _lcdD5 = GpioController.GetDefault().OpenPin(pinLcdD5, GpioSharingMode.Exclusive);
+            _lcdD5 = GpioController.GetDefault().OpenPin(pinLcdD5);
             _lcdD5.SetDriveMode(GpioPinDriveMode.Output);
 
-            _backlight = GpioController.GetDefault().OpenPin(pinBacklight, GpioSharingMode.Exclusive);
+            _backlight = GpioController.GetDefault().OpenPin(pinBacklight);
             _backlight.SetDriveMode(GpioPinDriveMode.Output);
 
-            _lcdD6 = GpioController.GetDefault().OpenPin(pinLcdD6, GpioSharingMode.Exclusive);
+            _lcdD6 = GpioController.GetDefault().OpenPin(pinLcdD6);
             _lcdD6.SetDriveMode(GpioPinDriveMode.Output);
 
             _currentRow = 0;

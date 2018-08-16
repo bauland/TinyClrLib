@@ -66,8 +66,6 @@
     <Error Condition="!Exists('..\..\..\packages\GHIElectronics.TinyCLR.Core.0.12.0\build\net452\GHIElectronics.TinyCLR.Core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\GHIElectronics.TinyCLR.Core.0.12.0\build\net452\GHIElectronics.TinyCLR.Core.props'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>nuget pack "$(ProjectPath)" -Properties Configuration=$(ConfigurationName)
-if defined NUGET_REPOSITORY (echo NUGET_REPOSITORY is defined: %25NUGET_REPOSITORY%25) else (echo NUGET_REPOSITORY is NOT defined; exit 1)
-copy /Y "$(TargetDir)*.nupkg" "$(NUGET_REPOSITORY)"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)Modules\postbuild.bat" $(ProjectPath) $(TargetDir) $(ConfigurationName)</PostBuildEvent>
   </PropertyGroup>
 </Project>

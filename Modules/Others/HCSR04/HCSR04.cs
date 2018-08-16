@@ -2,7 +2,7 @@
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace Bauland.Other
+namespace Bauland.Others
 {
     /// <summary>
     /// Wrapper class for HC-SR04 Module
