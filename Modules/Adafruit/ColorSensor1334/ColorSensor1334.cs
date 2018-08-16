@@ -159,7 +159,7 @@ namespace Bauland.Adafruit
             {
                 BusSpeed = I2cBusSpeed.FastMode
             };
-            _colorSensorDevice = I2cDevice.FromId(i2CBus, settings);
+            _colorSensorDevice = I2cController.FromName(i2CBus).GetDevice(settings);
             SetIntegrationTime(IntegrationTime.It_2_4ms);
             SetGain(Gain.Gain1X);
             Enable(true);

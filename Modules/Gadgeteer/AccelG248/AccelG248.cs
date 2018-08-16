@@ -26,7 +26,7 @@ namespace Bauland.Gadgeteer
             {
                 BusSpeed = I2cBusSpeed.FastMode
             };
-            _i2C=I2cDevice.FromId(i2CIdentifier,settings);
+            _i2C=I2cController.FromName(i2CIdentifier).GetDevice(settings);
             byte[] buffer = new byte[] {0x2A, 0x01};
             _i2C.Write(buffer);
         }
