@@ -17,7 +17,7 @@ namespace Bauland.Gadgeteer
         private const int StepFactor = 250;
 
         private readonly GpioPin[] _directions;
-        private readonly PwmPin[] _pwms;
+        private readonly PwmChannel[] _pwms;
         private readonly PwmController[] _controllers;
 
         private readonly double[] _lastSpeeds;
@@ -53,24 +53,24 @@ namespace Bauland.Gadgeteer
 
             _controllers = new[]
              {
-                PwmController.FromId(idPwmController1),
-                PwmController.FromId(idPwmController2),
+                PwmController.FromName(idPwmController1),
+                PwmController.FromName(idPwmController2),
             };
             foreach (var controller in _controllers)
                 controller.SetDesiredFrequency(Frequency);
 
             _pwms = new[]
             {
-                _controllers[0].OpenPin(pinPwm1),
-                _controllers[1].OpenPin(pinPwm2),
+                _controllers[0].OpenChannel(pinPwm1),
+                _controllers[1].OpenChannel(pinPwm2),
             };
             foreach (var pwmPin in _pwms)
                 pwmPin.Start();
 
             _directions = new[]
             {
-                GpioController.GetDefault().OpenPin(pinDir1,GpioSharingMode.Exclusive),
-                GpioController.GetDefault().OpenPin(pinDir2,GpioSharingMode.Exclusive),
+                GpioController.GetDefault().OpenPin(pinDir1),
+                GpioController.GetDefault().OpenPin(pinDir2),
             };
             foreach (var dir in _directions)
             {

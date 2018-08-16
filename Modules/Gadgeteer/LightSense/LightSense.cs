@@ -1,4 +1,5 @@
 ﻿using GHIElectronics.TinyCLR.Devices.Adc;
+// ReSharper disable UnusedMember.Global
 
 namespace Bauland.Gadgeteer
 {
