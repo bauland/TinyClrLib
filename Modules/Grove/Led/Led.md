@@ -1,5 +1,5 @@
 # Grove Led modules
-Version: __0.12.0__
+Version: __1.0.0-preview1__
 
 ## Connections ##
 Grove Led is connected as followed on [Netduino3](http://docs.ghielectronics.com/hardware/legacy_products/gadgeteer/fez_cerberus.html):

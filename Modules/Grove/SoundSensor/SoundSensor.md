@@ -1,5 +1,5 @@
 # Grove SoundSensor modules
-Version: __0.12.0__
+Version: __1.0.0-preview1__
 
 ## Connections ##
 Grove SoundSensor is connected as followed on [Netduino3](http://developer.wildernesslabs.co/Netduino/About/):

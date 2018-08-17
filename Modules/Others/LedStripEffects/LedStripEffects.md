@@ -1,5 +1,5 @@
 # LedStrip Effects modules
-Version: __0.12.0__
+Version: __1.0.0-preview1__
 
 ## Connections ##
 LedStrip is connected as followed on [Electron](http://www.ingenuitymicro.com/products/electron/):

@@ -1,5 +1,5 @@
 # Grove ServoMotor modules
-Version: __0.12.0__
+Version: __1.0.0-preview1__
 
 ## Connections ##
 Grove ServoMotor is connected as followed on [Netduino 3](http://developer.wildernesslabs.co/Netduino/About/):

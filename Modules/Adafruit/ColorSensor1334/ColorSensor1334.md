@@ -1,5 +1,5 @@
 # ColorSensor1334 modules
-Version: __0.12.0__
+Version: __1.0.0-preview1__
 
 ## Connections ##
 ColorSensor1334 is connected as followed on [FEZ Panda III](https://old.ghielectronics.com/catalog/product/474):

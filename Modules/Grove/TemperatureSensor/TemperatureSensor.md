@@ -1,5 +1,5 @@
 # Grove TemperatureSensor modules
-Version: __0.12.0__
+Version: __1.0.0-preview1__
 
 ## Connections ##
 Grove TemperatureSensor is connected as followed on [Netduino3](http://developer.wildernesslabs.co/Netduino/About/):
