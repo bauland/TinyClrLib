@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
+using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.I2c;
+using GHIElectronics.TinyCLR.Devices.I2c.Provider;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
@@ -54,13 +56,12 @@ namespace Bauland.Gadgeteer
         public TempHumidity(int sckPin, int dataPin)
         {
             // Software I2C
-            var softwareProvider = new I2cSoftwareProvider(dataPin, sckPin);
-            var controllers = I2cController.GetControllers(softwareProvider);
-            var controller = controllers[0];
+            var softwareProvider = new I2cControllerSoftwareProvider(GpioController.GetDefault(),dataPin, sckPin);
+            var controller = I2cController.FromProvider(softwareProvider);
             _device = controller.GetDevice(new I2cConnectionSettings(0x40)
             {
                 BusSpeed = I2cBusSpeed.StandardMode,
-                SharingMode = I2cSharingMode.Exclusive
+                AddressFormat = I2cAddressFormat.SevenBit,
             });
 
             // Reset device
