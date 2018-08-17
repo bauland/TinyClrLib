@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
-using GHIElectronics.TinyCLR.Devices.SerialCommunication;
-using GHIElectronics.TinyCLR.Storage.Streams;
+using GHIElectronics.TinyCLR.Devices.Uart;
+
 // ReSharper disable StringIndexOfIsCultureSpecific.1
 // ReSharper disable StringLastIndexOfIsCultureSpecific.1
 // ReSharper disable UnusedMember.Global
@@ -37,7 +37,7 @@ namespace Bauland.Grove
     public class SerialBluetooth3
     {
         private const int Delay = 100;
-        private SerialDevice _serial;
+        private UartController _serial;
         private DataReader _reader;
         private DataWriter _writer;
         private readonly string _uart;
@@ -452,7 +452,7 @@ namespace Bauland.Grove
             _serial = null;
         }
 
-        private static uint GetValue(BaudRate baudRate)
+        private static int GetValue(BaudRate baudRate)
         {
             switch (baudRate)
             {
@@ -475,10 +475,9 @@ namespace Bauland.Grove
 
         private void OpenSerial(string idUart, BaudRate baudRate)
         {
-            _serial = SerialDevice.FromId(idUart);
+            _serial = UartController.FromName(idUart);
+            _serial.SetActiveSettings(GetValue(baudRate),8,UartParity.None,UartStopBitCount.One,UartHandshake.None);
             _baudRate = baudRate;
-            _serial.BaudRate = GetValue(baudRate);
-            _serial.ReadTimeout = TimeSpan.FromMilliseconds(200);
             _reader = new DataReader(_serial.InputStream);
             _writer = new DataWriter(_serial.OutputStream);
         }
