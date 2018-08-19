@@ -1,4 +1,5 @@
-﻿using GHIElectronics.TinyCLR.Devices.Gpio;
+﻿using System;
+using GHIElectronics.TinyCLR.Devices.Signals;
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -9,7 +10,7 @@ namespace Bauland.Others
     /// </summary>
     public class Hcsr04
     {
-        private readonly GpioPulseReaderWriter _pulse;
+        private readonly PulseFeedback _pulse;
 
         /// <summary>
         /// Use to correct measurement in linear way:  result = value * A + B (default: 0.81f)
@@ -27,7 +28,11 @@ namespace Bauland.Others
         /// <param name="echoPin">pin connected to echo pin</param>
         public Hcsr04(int triggerPin, int echoPin)
         {
-            _pulse = new GpioPulseReaderWriter(GpioPulseReaderWriter.Mode.EchoDuration, true, 10, triggerPin, true, echoPin);
+            //_pulse = new GpioPulseReaderWriter(GpioPulseReaderWriter.Mode.EchoDuration, true, 10, triggerPin, true, echoPin);
+            _pulse = new PulseFeedback(triggerPin, echoPin, PulseFeedbackMode.EchoDuration)
+            {
+                PulseLength = TimeSpan.FromTicks(10 * 10)
+            };
         }
 
         /// <summary>
@@ -36,7 +41,7 @@ namespace Bauland.Others
         /// <returns>Value return is in centimeters</returns>
         public float ReadCentimeters()
         {
-            return (float)(_pulse.Read() * 17 / 1000.0) * A + B;
+            return (float)(_pulse.GeneratePulse() * 17 / 1000.0) * A + B;
         }
 
         /// <summary>
