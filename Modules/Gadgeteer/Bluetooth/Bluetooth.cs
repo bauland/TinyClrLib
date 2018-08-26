@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using GHIElectronics.TinyCLR.Devices.Gpio;
-using GHIElectronics.TinyCLR.Devices.SerialCommunication;
-using GHIElectronics.TinyCLR.Storage.Streams;
+using GHIElectronics.TinyCLR.Devices.Uart;
+
 // ReSharper disable StringIndexOfIsCultureSpecific.1
 // ReSharper disable StringIndexOfIsCultureSpecific.2
 // ReSharper disable FunctionNeverReturns
@@ -21,10 +22,12 @@ namespace Bauland.Gadgeteer
         /// Direct access to Serial Port.
         /// </summary>
 
-        private readonly SerialDevice _serialPort;
+        private readonly UartController _serialPort;
 
-        private readonly DataReader _dataReader;
-        private readonly DataWriter _dataWriter;
+        private byte[] rxBuffer;
+
+        //private readonly DataReader _dataReader;
+        //private readonly DataWriter _dataWriter;
 
         private readonly GpioPin _reset;
         private readonly GpioPin _statusInt;
@@ -100,7 +103,7 @@ namespace Bauland.Gadgeteer
             // This finds the Socket instance from the user-specified socket number. This will generate user-friendly error messages if the socket is invalid. If there is more than one socket on this
             // module, then instead of "null" for the last parameter, put text that identifies the socket to the user (e.g. "S" if there is a socket type S)
             // Socket socket = Socket.GetSocket(socketNumber, true, this, null);
-
+            rxBuffer = new byte[128];
             //this.reset = GTI.DigitalOutputFactory.Create(socket, Socket.Pin.Six, false, this);
             _reset = GpioController.GetDefault().OpenPin(pinReset);
             _reset.SetDriveMode(GpioPinDriveMode.Output);
@@ -112,19 +115,18 @@ namespace Bauland.Gadgeteer
             _statusInt.DebounceTimeout = TimeSpan.FromMilliseconds(1);
 
             // this.serialPort = GTI.SerialFactory.Create(socket, 38400, GTI.SerialParity.None, GTI.SerialStopBits.One, 8, GTI.HardwareFlowControl.NotRequired, this);
-            _serialPort = SerialDevice.FromId(uartId);
-            _serialPort.BaudRate = 38400;
-            _serialPort.Parity = SerialParity.None;
-            _serialPort.StopBits = SerialStopBitCount.One;
-            _serialPort.Handshake = SerialHandshake.None;
-            _serialPort.ReadTimeout = TimeSpan.MaxValue;
+            _serialPort = UartController.FromName(uartId);
+            _serialPort.SetActiveSettings(38400, 8, UartParity.None, UartStopBitCount.One, UartHandshake.None);
+            _serialPort.Enable();
+
+            //_serialPort.DataReceived += _serialPort_DataReceived;
 
             //this.statusInt.Interrupt += GTI.InterruptInputFactory.Create.InterruptEventHandler(statusInt_Interrupt);
             //           this.serialPort.ReadTimeout = Timeout.Infinite;
             //           this.serialPort.Open();
 
-            _dataReader = new DataReader(_serialPort.InputStream);
-            _dataWriter = new DataWriter(_serialPort.OutputStream);
+            //_dataReader = new DataReader(_serialPort.InputStream);
+            //_dataWriter = new DataWriter(_serialPort.OutputStream);
 
             Thread.Sleep(5);
             _reset.Write(GpioPinValue.High);
@@ -181,8 +183,14 @@ namespace Bauland.Gadgeteer
         /// <param name="name">Name of the device</param>
         public void SetDeviceName(string name)
         {
-            _dataWriter.WriteString("\r\n+STNA=" + name + "\r\n");
-            _dataWriter.Store();
+            var msg = $"\r\n+STNA={name}\r\n";
+            WriteString(msg);
+        }
+
+        private void WriteString(string str)
+        {
+            var bytes = Encoding.UTF8.GetBytes(str);
+            _serialPort.Write(bytes);
         }
 
         /// <summary>Switch the device to the directed speed</summary>
@@ -227,8 +235,8 @@ namespace Bauland.Gadgeteer
 
             if (cmd != "")
             {
-                _dataWriter.WriteString("\r\n+STBD=" + cmd + "\r\n");
-                _dataWriter.Store();
+                var msg = "\r\n+STBD=" + cmd + "\r\n";
+                WriteString(msg);
             }
             Thread.Sleep(500);
         }
@@ -237,8 +245,8 @@ namespace Bauland.Gadgeteer
         /// <param name="pinCode"></param>
         public void SetPinCode(string pinCode)
         {
-            _dataWriter.WriteString("\r\n+STPIN=" + pinCode + "\r\n");
-            _dataWriter.Store();
+            var msg = "\r\n+STPIN=" + pinCode + "\r\n";
+            WriteString(msg);
         }
 
         /// <summary>Thread that continuously reads incoming messages from the module, parses them and triggers the corresponding events.</summary>
@@ -247,9 +255,15 @@ namespace Bauland.Gadgeteer
             while (true)
             {
                 String response = "";
-                while (_dataReader.Load(1) > 0)
+                //while (_dataReader.Load(1) > 0)
+                //{
+                //    response = response + (char)_dataReader.ReadByte();
+                //    Thread.Sleep(1);
+                //}
+                while (_serialPort.BytesToRead > 0)
                 {
-                    response = response + (char)_dataReader.ReadByte();
+                    var bytesReceived = _serialPort.Read(rxBuffer, 0, _serialPort.BytesToRead);
+                    response = response + Encoding.UTF8.GetString(rxBuffer, 0, bytesReceived);
                     Thread.Sleep(1);
                 }
                 if (response.Length > 0)
@@ -286,9 +300,10 @@ namespace Bauland.Gadgeteer
                         // Keep reading until the end of the message
                         while (last < 0)
                         {
-                            while (_dataReader.Load(1) > 0)
+                            while (_serialPort.BytesToRead > 0)
                             {
-                                response = response + (char)_dataReader.ReadByte();
+                                var bytesReceived = _serialPort.Read(rxBuffer, 0, _serialPort.BytesToRead);
+                                response = response + Encoding.UTF8.GetString(rxBuffer, 0, bytesReceived);
                             }
                             last = response.IndexOf("\r", first);
                         }
@@ -408,23 +423,20 @@ namespace Bauland.Gadgeteer
             internal Client(Bluetooth bluetooth)
             {
                 _bluetooth = bluetooth;
-                _bluetooth._dataWriter.WriteString("\r\n+STWMOD=0\r\n");
-                _bluetooth._dataWriter.Store();
+                _bluetooth.WriteString("\r\n+STWMOD=0\r\n");
             }
 
             /// <summary>Enters pairing mode</summary>
             public void EnterPairingMode()
             {
-                _bluetooth._dataWriter.WriteString("\r\n+INQ=1\r\n");
-                _bluetooth._dataWriter.Store();
+                _bluetooth.WriteString("\r\n+INQ=1\r\n");
             }
 
             /// <summary>Inputs pin code</summary>
             /// <param name="pinCode">Module's pin code. Default: 0000</param>
             public void InputPinCode(string pinCode)
             {
-                _bluetooth._dataWriter.WriteString("\r\n+RTPIN=" + pinCode + "\r\n");
-                _bluetooth._dataWriter.Store();
+                _bluetooth.WriteString("\r\n+RTPIN=" + pinCode + "\r\n");
             }
 
             /// <summary>Closes current connection. Doesn't work yet.</summary>
@@ -439,16 +451,14 @@ namespace Bauland.Gadgeteer
             /// <param name="message">String containing the data to be sent</param>
             public void Send(string message)
             {
-                _bluetooth._dataWriter.WriteString(message);
-                _bluetooth._dataWriter.Store();
+                _bluetooth.WriteString(message);
             }
 
             /// <summary>Sends data through the connection.</summary>
             /// <param name="message">String containing the data to be sent</param>
             public void SendLine(string message)
             {
-                _bluetooth._dataWriter.WriteString(message);
-                _bluetooth._dataWriter.Store();
+                _bluetooth.WriteString(message);
             }
         }
 
@@ -460,31 +470,27 @@ namespace Bauland.Gadgeteer
             internal Host(Bluetooth bluetooth)
             {
                 _bluetooth = bluetooth;
-                bluetooth._dataWriter.WriteString("\r\n+STWMOD=1\r\n");
-                bluetooth._dataWriter.Store();
+                bluetooth.WriteString("\r\n+STWMOD=1\r\n");
             }
 
             /// <summary>Starts inquiring for devices</summary>
             public void InquireDevice()
             {
-                _bluetooth._dataWriter.WriteString("\r\n+INQ=1\r\n");
-                _bluetooth._dataWriter.Store();
+                _bluetooth.WriteString("\r\n+INQ=1\r\n");
             }
 
             /// <summary>Makes a connection with a device using its MAC address.</summary>
             /// <param name="macAddress">MAC address of the device</param>
             public void Connect(string macAddress)
             {
-                _bluetooth._dataWriter.WriteString("\r\n+CONN=" + macAddress + "\r\n");
-                _bluetooth._dataWriter.Store();
+                _bluetooth.WriteString("\r\n+CONN=" + macAddress + "\r\n");
             }
 
             /// <summary>Inputs the PIN code.</summary>
             /// <param name="pinCode">PIN code. Default 0000</param>
             public void InputPinCode(string pinCode)
             {
-                _bluetooth._dataWriter.WriteString("\r\n+RTPIN=" + pinCode + "\r\n");
-                _bluetooth._dataWriter.Store();
+                _bluetooth.WriteString("\r\n+RTPIN=" + pinCode + "\r\n");
             }
 
             /// <summary>Closes the current connection. Doesn't work yet.</summary>
