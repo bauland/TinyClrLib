@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using GHIElectronics.TinyCLR.Devices.Uart;
 
@@ -18,28 +19,33 @@ namespace Bauland.Grove
     public enum BaudRate
     {
         /// <summary> </summary>
-        BaudRate9600 = 4,
+        BaudRate4800 = 1,
         /// <summary> </summary>
-        BaudRate19200 = 5,
+        BaudRate9600 = 2,
         /// <summary> </summary>
-        BaudRate38400 = 6,
+        BaudRate19200 = 3,
         /// <summary> </summary>
-        BaudRate57600 = 7,
+        BaudRate38400 = 4,
         /// <summary> </summary>
-        BaudRate115200 = 8,
+        BaudRate57600 = 5,
         /// <summary> </summary>
-        BaudRate230400 = 9,
+        BaudRate115200 = 6,
+        /// <summary> </summary>
+        BaudRate230400 = 7,
+        /// <summary> </summary>
+        BaudRate460800 = 8
     }
 
     /// <summary>
-    /// Wrapper for Grove Serail Bluetooth 3 module
+    /// Wrapper for Grove Serial Bluetooth 3 module
     /// </summary>
     public class SerialBluetooth3
     {
         private const int Delay = 100;
         private UartController _serial;
-        private DataReader _reader;
-        private DataWriter _writer;
+        //private DataReader _reader;
+        //private DataWriter _writer;
+        private byte[] _readBuffer;
         private readonly string _uart;
         private BaudRate _baudRate;
         private readonly Thread _readerThread;
@@ -58,8 +64,9 @@ namespace Bauland.Grove
         /// </summary>
         /// <param name="idUart"></param>
         /// <param name="baudRate">Set initial rate of module (default is 9600)</param>
-        public SerialBluetooth3(string idUart, BaudRate baudRate = BaudRate.BaudRate9600)
+        public SerialBluetooth3(string idUart, BaudRate baudRate = BaudRate.BaudRate115200)
         {
+            _readBuffer = new byte[40];
             IsScanning = false;
             IsConnected = false;
             _uart = idUart;
@@ -185,13 +192,24 @@ namespace Bauland.Grove
         /// <returns>Result of query is in Response member</returns>
         public QueryResponse RestoreDefault()
         {
-            _writer.WriteString("AT+DEFAULT");
-            _writer.Store();
-            ChangeSerial(BaudRate.BaudRate9600);
-            Thread.Sleep(3000);
-            var read = _reader.Load(30);
-            var rep = _reader.ReadString(read);
+            WriteString("AT+RENEW");
+            WriteString("AT+RESET");
+            ChangeSerial(BaudRate.BaudRate115200);
+            Thread.Sleep(2000);
+            string rep = "";
+            while (_serial.BytesToRead > 0)
+            {
+                var readBytes = _serial.Read(_readBuffer);
+                rep = rep + Encoding.UTF8.GetString(_readBuffer, 0, readBytes);
+                Thread.Sleep(1);
+            }
             return TreatResponse(rep);
+        }
+
+        private void WriteString(string str)
+        {
+            var bytes = Encoding.UTF8.GetBytes(str);
+            _serial.Write(bytes);
         }
 
         /// <summary>Sends data through the connection.</summary>
@@ -199,8 +217,7 @@ namespace Bauland.Grove
         public void SendString(string message)
         {
             if (!IsConnected) throw new InvalidOperationException("Module must be connected first");
-            _writer.WriteString(message);
-            _writer.Store();
+            WriteString(message);
         }
 
         /// <summary>Sends data through the connection.</summary>
@@ -208,8 +225,12 @@ namespace Bauland.Grove
         public void SendByte(byte b)
         {
             if (!IsConnected) throw new InvalidOperationException("Module must be connected first");
-            _writer.WriteByte(b);
-            _writer.Store();
+            WriteByte(b);
+        }
+
+        private void WriteByte(byte b)
+        {
+            _serial.Write(new[] { b });
         }
 
         /// <summary>Sends data through the connection.</summary>
@@ -217,8 +238,7 @@ namespace Bauland.Grove
         public void SendBytes(byte[] bytesArray)
         {
             if (!IsConnected) throw new InvalidOperationException("Module must be connected first");
-            _writer.WriteBytes(bytesArray);
-            _writer.Store();
+            _serial.Write(bytesArray);
         }
 
         #region Master
@@ -444,10 +464,6 @@ namespace Bauland.Grove
 
         private void CloseSerial()
         {
-            _writer.Dispose();
-            _writer = null;
-            _reader.Dispose();
-            _reader = null;
             _serial.Dispose();
             _serial = null;
         }
@@ -456,6 +472,8 @@ namespace Bauland.Grove
         {
             switch (baudRate)
             {
+                case BaudRate.BaudRate4800:
+                    return 4800;
                 case BaudRate.BaudRate9600:
                     return 9600;
                 case BaudRate.BaudRate19200:
@@ -468,6 +486,8 @@ namespace Bauland.Grove
                     return 115200;
                 case BaudRate.BaudRate230400:
                     return 230400;
+                case BaudRate.BaudRate460800:
+                    return 460800;
                 default:
                     throw new InvalidOperationException();
             }
@@ -476,38 +496,53 @@ namespace Bauland.Grove
         private void OpenSerial(string idUart, BaudRate baudRate)
         {
             _serial = UartController.FromName(idUart);
-            _serial.SetActiveSettings(GetValue(baudRate),8,UartParity.None,UartStopBitCount.One,UartHandshake.None);
+            _serial.SetActiveSettings(GetValue(baudRate), 8, UartParity.None, UartStopBitCount.One, UartHandshake.None);
             _baudRate = baudRate;
-            _reader = new DataReader(_serial.InputStream);
-            _writer = new DataWriter(_serial.OutputStream);
+            _serial.Enable();
         }
         private QueryResponse QueryResponse(string command)
         {
+            byte[] readBuffer=new byte[30];
+            string rep = "";
             if (IsConnected) throw new InvalidOperationException("Module is connected. It can't be configured.");
-            _writer.WriteString(command);
-            _writer.Store();
-            Thread.Sleep(Delay);
-            var read = _reader.Load(30);
-            var rep = _reader.ReadString(read);
-            var response = TreatResponse(rep);
-            return response;
+            WriteString(command);
+            while (_serial.BytesToRead == 0)
+            {
+                Thread.Sleep(1);
+            }
+
+            //var read = _reader.Load(30);
+                //var rep = _reader.ReadString(read);
+                while (_serial.BytesToRead > 0)
+            {
+                var readBytes = _serial.Read(_readBuffer);
+                rep = rep + Encoding.UTF8.GetString(_readBuffer, 0, readBytes);
+                Thread.Sleep(1);
+            }
+            return TreatResponse(rep);
         }
 
         private void RunReaderThread()
         {
             string response;
-            string delim = "OK+SCAN";
+            const string delim = "OK+SCAN";
             string mac;
             int beginResponse, first;
 
             while (true)
             {
                 response = "";
-                while (_reader.Load(1) > 0)
+                while (_serial.BytesToRead > 0)
                 {
-                    response = response + (char)_reader.ReadByte();
+                    var readBytes = _serial.Read(_readBuffer);
+                    response = response + Encoding.UTF8.GetString(_readBuffer, 0, readBytes);
                     Thread.Sleep(1);
                 }
+                //while (_reader.Load(1) > 0)
+                //{
+                //    response = response + (char)_reader.ReadByte();
+                //    Thread.Sleep(1);
+                //}
                 if (response.Length > 0)
                 {
                     if (response == "OK+CONN")

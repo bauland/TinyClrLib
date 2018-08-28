@@ -1,10 +1,13 @@
 # Grove SerialBluetooth3 modules
-Version: __0.12.0__
+Version: __1.0.0-preview1__
+
+> Module can be power with 3.3V or 5V. Default speed for serial communication is 115200 baud __(and not 9600 as in Seeed doc)__.
 
 ## Connections ##
 Grove SerialBluetooth3 is connected as followed on [Netduino 3](http://developer.wildernesslabs.co/Netduino/About/):
 
 ![Schematic](SerialBluetooth3-Netduino3-with-base-shield.jpg)
+
 
 Grove Rtc  | Mainboard
 ---------------- | ----------
