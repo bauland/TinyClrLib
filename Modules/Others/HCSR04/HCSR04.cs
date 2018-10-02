@@ -41,7 +41,7 @@ namespace Bauland.Others
         /// <returns>Value return is in centimeters</returns>
         public float ReadCentimeters()
         {
-            return (float)(_pulse.GeneratePulse() * 17 / 1000.0) * A + B;
+            return (float)(_pulse.GeneratePulse().TotalMilliseconds * 17 / 1000.0) * A + B;
         }
 
         /// <summary>

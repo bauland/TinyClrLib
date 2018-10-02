@@ -1,5 +1,5 @@
 # HC-SR04 modules
-Version: __1.0.0-preview1__
+Version: __1.0.0-preview2__
 
 ## Connections ##
 HC-SR04 is connected as followed on [Electron](http://www.ingenuitymicro.com/products/electron/):

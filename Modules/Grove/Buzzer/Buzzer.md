@@ -1,5 +1,5 @@
 # Grove Buzzer modules
-Version: __1.0.0-preview1__
+Version: __1.0.0-preview2__
 
 ## Connections ##
 Grove Buzzer is connected as followed on [Netduino3](http://docs.ghielectronics.com/hardware/legacy_products/gadgeteer/fez_cerberus.html):

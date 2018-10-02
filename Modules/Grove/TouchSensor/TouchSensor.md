@@ -1,5 +1,5 @@
 # Grove TouchSensor modules
-Version: __1.0.0-preview1__
+Version: __1.0.0-preview2__
 
 ## Connections ##
 Grove TouchSensor is connected as followed on [Netduino3](http://developer.wildernesslabs.co/Netduino/About/):

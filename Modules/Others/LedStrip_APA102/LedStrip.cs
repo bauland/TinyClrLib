@@ -53,8 +53,9 @@ namespace Bauland.Others
                 _leds[i] = new Led(order);
             _dummy = new byte[4 + 4 * size + size / 8 / 2];
             _data = new byte[4 + 4 * size + size / 8 / 2];
-            SpiConnectionSettings settings = new SpiConnectionSettings(chipSelect)
+            SpiConnectionSettings settings = new SpiConnectionSettings()
             {
+                ChipSelectLine = chipSelect,
                 DataBitLength = 8,
                 ClockFrequency = 10 * 1000 * 1000
             };
