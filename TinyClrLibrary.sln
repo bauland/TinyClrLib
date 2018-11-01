@@ -104,9 +104,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialBluetooth3", "Modules
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thumb_Joystick", "Modules\Grove\Thumb_Joystick\Thumb_Joystick.csproj", "{6552460C-727D-41E5-AD4D-03986D7073B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedStrip", "Modules\Others\LedStrip_APA102\LedStrip_APA102.csproj", "{40DD0ECA-3ECF-4739-BA69-23A03D24137A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedStrip_APA102", "Modules\Others\LedStrip_APA102\LedStrip_APA102.csproj", "{40DD0ECA-3ECF-4739-BA69-23A03D24137A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedStripEffects", "Modules\Others\LedStripEffects\LedStripEffects.csproj", "{2C12672E-E40B-4CEA-8F84-574388E334E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeoPixel", "Modules\Adafruit\NeoPixel\NeoPixel.csproj", "{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -274,6 +276,10 @@ Global
 		{2C12672E-E40B-4CEA-8F84-574388E334E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C12672E-E40B-4CEA-8F84-574388E334E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C12672E-E40B-4CEA-8F84-574388E334E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -323,6 +329,7 @@ Global
 		{6552460C-727D-41E5-AD4D-03986D7073B8} = {909B1F40-DF80-403C-B729-A1502DB38AC9}
 		{40DD0ECA-3ECF-4739-BA69-23A03D24137A} = {CBC8DD28-C854-4412-ADBD-2A60DD0707F4}
 		{2C12672E-E40B-4CEA-8F84-574388E334E3} = {CBC8DD28-C854-4412-ADBD-2A60DD0707F4}
+		{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E} = {86A69051-7BD9-4F8A-B26C-C747DB4883E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFE8F872-04F4-4FB3-97A0-0280C96B9F74}
