@@ -44,7 +44,9 @@ namespace Bauland.Others
         /// <param name="spiBus">Id of spi bus</param>
         /// <param name="chipSelect">ChipSelect pin. May be a dummy pin (as not connected) as it don't be used</param>
         /// <param name="order">Order of colors</param>
-        public LedStrip(int size, string spiBus, int chipSelect, ColorOrder order)
+        /// <param name="frequency">Frequency of spi bus (default 4M).</param>
+        /// <param name="spiMode">Mode of spi bus (default Mode0)</param>
+        public LedStrip(int size, string spiBus, int chipSelect, ColorOrder order, int frequency = 4 * 1000 * 1000, SpiMode spiMode = SpiMode.Mode0)
         {
             if (size < 1) throw new ArgumentOutOfRangeException(nameof(size), "must be greater than 0");
             Size = size;
@@ -57,7 +59,8 @@ namespace Bauland.Others
             {
                 ChipSelectLine = chipSelect,
                 DataBitLength = 8,
-                ClockFrequency = 10 * 1000 * 1000
+                ClockFrequency = frequency,
+                Mode = spiMode
             };
             _spi = SpiController.FromName(spiBus).GetDevice(settings);
             PrepareStart();
