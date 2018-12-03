@@ -1,5 +1,5 @@
 # Grove LcdRgbBacklight modules
-Version: __1.0.0-preview2__
+Version: __1.0.0-preview3__
 
 ## Connections ##
 Grove LcdRgbBacklight is connected as followed on [Netduino 3](http://www.wildernesslabs.co/Netduino):

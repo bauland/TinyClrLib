@@ -1,5 +1,5 @@
 # Grove Rtc modules
-Version: __1.0.0-preview2__
+Version: __1.0.0-preview3__
 
 ## Connections ##
 Grove Rtc is connected as followed on [Netduino 3](http://developer.wildernesslabs.co/Netduino/About/):

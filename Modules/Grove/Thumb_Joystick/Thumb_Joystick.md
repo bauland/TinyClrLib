@@ -1,5 +1,5 @@
 # Grove Thumb_Joystick modules
-Version: __1.0.0-preview2__
+Version: __1.0.0-preview3__
 
 ## Connections ##
 Grove Thumb_Joystick is connected as followed on [FEZ](https://www.ghielectronics.com/products/fez):
