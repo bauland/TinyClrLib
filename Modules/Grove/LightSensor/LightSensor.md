@@ -1,5 +1,5 @@
 # Grove LightSensor modules
-Version: __1.0.0-preview3__
+Version: __1.0.0__
 
 ## Connections ##
 Grove LightSensor is connected as followed on [Netduino3](http://developer.wildernesslabs.co/Netduino/About/):

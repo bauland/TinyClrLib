@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.0-preview3</version>
+    <version>1.0.0</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
@@ -16,7 +16,7 @@
     <copyright>Copyright 2017-2018</copyright>
     <tags>TinyClr Gadgeteer Led Led7C 7C</tags>
     <dependencies>
-      <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0-preview3" />
+      <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0" />
     </dependencies>
   </metadata>
   <files>

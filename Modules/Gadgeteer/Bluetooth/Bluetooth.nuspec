@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.0-preview3</version>
+    <version>1.0.0</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
@@ -16,7 +16,9 @@
     <copyright>Copyright 2017-2018</copyright>
     <tags>TinyClr Gadgeteer Bluetooth BT</tags>
     <dependencies>
-      <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0-preview3" />
+      <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0" />
+      <dependency id="GHIElectronics.TinyCLR.Devices.Gpio" version="1.0.0" />
+      <dependency id="GHIElectronics.TinyCLR.Devices.Uart" version="1.0.0" />
     </dependencies>
   </metadata>
   <files>

@@ -1,5 +1,5 @@
 # Grove SerialBluetooth3 modules
-Version: __1.0.0-preview3__
+Version: __1.0.0__
 
 > Module can be power with 3.3V or 5V. Default speed for serial communication is 115200 baud __(and not 9600 as in Seeed doc)__.
 

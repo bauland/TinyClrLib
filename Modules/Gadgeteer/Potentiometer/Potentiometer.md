@@ -1,5 +1,5 @@
 # Potentiometer modules
-Version: __1.0.0-preview3__
+Version: __1.0.0__
 
 ## Connections ##
 Potentiometer is connected as followed on [Cerberus](http://docs.ghielectronics.com/hardware/legacy_products/gadgeteer/fez_cerberus.html):

@@ -1,5 +1,5 @@
 # NeoPixel modules
-Version: __1.0.0-preview3__
+Version: __1.0.0__
 
 ## Connections ##
 NeoPixel is connected as followed on [FEZ Panda III](https://old.ghielectronics.com/catalog/product/474):
