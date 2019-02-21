@@ -40,32 +40,31 @@ using Bauland.Pins;
 
 namespace FEZTftShieldDisplay
 {
-    static class Program
+    internal static class Program
     {
-        private static TftShieldDisplay _shield;
-
+        private static TftDisplayShield _shield;
         static void Main()
         {
             try
             {
-                _shield = new TftShieldDisplay(Netduino3.I2cBus.I2c, Netduino3.SpiBus.Spi2,
-                    Netduino3.GpioPin.D10, Netduino3.GpioPin.D8);
+                _shield = new TftDisplayShield(Netduino3.I2cBus.I2c, Netduino3.SpiBus.Spi2,
+                                    Netduino3.GpioPin.D10, Netduino3.GpioPin.D8);
 
-                _shield.SetOrientation(TftShieldDisplay.Orientation.Portrait);
+                _shield.SetOrientation(TftDisplayShield.Orientation.Portrait);
                 _shield.GetDisplayControllerProvider.Enable();
-                _shield.SetBackLight(TftShieldDisplay.BackLightOn);
-                _shield.OnButtonRaised += _shield_OnButtonRaisedA;
+                _shield.SetBackLight(TftDisplayShield.BackLightOn);
+                _shield.OnButtonPressed += _shield_OnButtonRaisedA;
                 _shield.OnButtonReleased += _shield_OnButtonReleased;
 
-                var disp = DisplayController.FromProvider(_shield.GetDisplayControllerProvider);
-                disp.SetConfiguration(new SpiDisplayControllerSettings { Width = _shield.Width, Height = _shield.Height });
+                var display = DisplayController.FromProvider(_shield.GetDisplayControllerProvider);
+                display.SetConfiguration(new SpiDisplayControllerSettings { Width = _shield.Width, Height = _shield.Height });
 
-                var screen = Graphics.FromHdc(GraphicsManager.RegisterDrawTarget(new DrawTarget(disp)));
+                var screen = Graphics.FromHdc(GraphicsManager.RegisterDrawTarget(new DrawTarget(display)));
                 screen.Clear(Color.Black);
                 screen.Flush();
 
-                var width = disp.ActiveConfiguration.Width;
-                var height = disp.ActiveConfiguration.Height;
+                var width = display.ActiveConfiguration.Width;
+                var height = display.ActiveConfiguration.Height;
                 var color = new Pen(Color.Yellow);
 
                 var rnd = new Random();
@@ -104,14 +103,14 @@ namespace FEZTftShieldDisplay
                             $"Free Ram/Used Ram/Total Ram: {Memory.FreeBytes} / {Memory.UsedBytes} / {Memory.UsedBytes + Memory.FreeBytes}");
         }
 
-        private static void _shield_OnButtonReleased(TftShieldDisplay sender, int buttonRaised)
+        private static void _shield_OnButtonReleased(TftDisplayShield sender, int buttonRaised)
         {
-            Debug.WriteLine("Released: " + TftShieldDisplay.Button.ToString(buttonRaised));
+            Trace.WriteLine("Released: " + TftDisplayShield.Button.ToString(buttonRaised));
         }
 
-        private static void _shield_OnButtonRaisedA(TftShieldDisplay sender, int buttonRaised)
+        private static void _shield_OnButtonRaisedA(TftDisplayShield sender, int buttonRaised)
         {
-            Debug.WriteLine("Fired: " + TftShieldDisplay.Button.ToString(buttonRaised));
+            Trace.WriteLine("Fired: " + TftDisplayShield.Button.ToString(buttonRaised));
         }
     }
 }
