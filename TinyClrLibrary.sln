@@ -111,6 +111,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedStripEffects", "Modules\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeoPixel", "Modules\Adafruit\NeoPixel\NeoPixel.csproj", "{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TftDisplayShield", "Modules\Adafruit\TftDisplayShield\TftDisplayShield.csproj", "{9283FF79-797E-49A0-ABAC-C54AD478212B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -281,6 +283,10 @@ Global
 		{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9283FF79-797E-49A0-ABAC-C54AD478212B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9283FF79-797E-49A0-ABAC-C54AD478212B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9283FF79-797E-49A0-ABAC-C54AD478212B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9283FF79-797E-49A0-ABAC-C54AD478212B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -331,6 +337,7 @@ Global
 		{40DD0ECA-3ECF-4739-BA69-23A03D24137A} = {CBC8DD28-C854-4412-ADBD-2A60DD0707F4}
 		{2C12672E-E40B-4CEA-8F84-574388E334E3} = {CBC8DD28-C854-4412-ADBD-2A60DD0707F4}
 		{5F7A66BB-407C-499C-AC04-47AC1AC6BF2E} = {86A69051-7BD9-4F8A-B26C-C747DB4883E7}
+		{9283FF79-797E-49A0-ABAC-C54AD478212B} = {86A69051-7BD9-4F8A-B26C-C747DB4883E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFE8F872-04F4-4FB3-97A0-0280C96B9F74}
