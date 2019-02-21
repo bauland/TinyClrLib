@@ -9,12 +9,12 @@
     <iconUrl>http://www.bauland.fr/Content/img/Logo-NuGet.png</iconUrl>
     <projectUrl>https://github.com/bauland/TinyClrLib</projectUrl>
     <language>en-US</language>
-    <licenseUrl>http://www.bauland.fr/Content/License.txt</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Initial release of the package.</releaseNotes>
     <copyright>Copyright 2017-2018</copyright>
     <tags>TinyClr Adafruit NeoPixel</tags>
+    <license type="file">license/license.txt</license>
     <dependencies>
       <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0" />
       <dependency id="GHIElectronics.TinyCLR.Devices.Spi" version="1.0.0" />
@@ -23,5 +23,6 @@
   <files>
     <file src="NeoPixel.html" target="" />
     <file src="Adafruit-NeoPixel-PandaIII.jpg" target="" />
+    <file src="../../../license.txt" target="license/license.txt" />
   </files>
 </package>

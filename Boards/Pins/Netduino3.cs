@@ -112,9 +112,9 @@ namespace Bauland.Pins
                 /// <summary>Pin definition.</summary>
                 public const int Pin6 = STM32F4.GpioPin.PD2;
                 /// <summary>LED definition.</summary>
-                public const int Led = STM32F4.GpioPin.PB0;
+                public const int Led = STM32F4.GpioPin.PE14;
                 /// <summary>Power On definition.</summary>
-                public const int PwrOn = STM32F4.GpioPin.PE14;
+                public const int PwrOn = STM32F4.GpioPin.PD12;
             }
         }
 
@@ -156,11 +156,11 @@ namespace Bauland.Pins
         public static class SpiBus
         {
             /// <summary>Socket GoPort 1 Spi definition</summary>
-            public const string GoPort1 = STM32F4.SpiBus.Spi4;
+            public const string GoPort1 = STM32F4.SpiBus.Spi3;
             /// <summary>Socket GoPort 2 Spi definition</summary>
-            public const string GoPort2 = STM32F4.SpiBus.Spi4;
+            public const string GoPort2 = STM32F4.SpiBus.Spi3;
             /// <summary>Socket GoPort 3 Spi definition</summary>
-            public const string GoPort3 = STM32F4.SpiBus.Spi4;
+            public const string GoPort3 = STM32F4.SpiBus.Spi3;
             /// <summary>Default Spi definition</summary>
             public const string Spi2 = STM32F4.SpiBus.Spi2;
         }
