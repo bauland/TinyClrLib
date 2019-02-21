@@ -25,6 +25,7 @@ Module              | State       | Package                                     
 ------------------- | ----------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------
 Color Sensor (1334) | __Working__ | [Package](https://www.nuget.org/packages/Bauland.Adafruit.ColorSensor1334/) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Adafruit/ColorSensor1334/ColorSensor1334.md) 
 NeoPixel (Stick, Shield ...) | __Working__ | [Package](https://www.nuget.org/packages/Bauland.Adafruit.NeoPixel/) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Adafruit/ColorSensor1334/ColorSensor1334.md) 
+Tft 1.8 Display Shield revB | __Working__ | [Package](https://www.nuget.org/packages/Bauland.Adafruit.TftDisplayShield/) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Adafruit/TftDisplayShield/TftDisplayShield.md) 
 
 ### Gadgeteer
 
@@ -69,11 +70,13 @@ Thumb Joystick  | __Working__    | [Package](https://www.nuget.org/packages/Baul
 TouchSensor     | __Working__    | [Package](https://www.nuget.org/packages/Bauland.Grove.TemperatureSensor/)| [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Grove/TouchSensor/TouchSensor.md)             | from GHI 
 UltrasonicRanger| __Working__    | [Package](https://www.nuget.org/packages/Bauland.Grove.UltrasonicRanger/) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Grove/UltrasonicRanger/UltrasonicRanger.md)   |
 
+<!-- 
 ### Mikro Click
 
 Module                | State          | Package     | Documentation
 --------------------- | -------------- | ----------- | -------------
 Bluetooth LE P module | :construction: |             | Not yet
+-->
 
 ### Others
 
@@ -82,7 +85,9 @@ Module          | State          | Package                                      
 HC-SR04         | __Working__    | [Package](https://www.nuget.org/packages/Bauland.Others.HCSR04/)          | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Others/HCSR04/HC-SR04.md)
 LedStrip        | __Working__    | [Package](https://www.nuget.org/packages/Bauland.Others.LedStrip/)        | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Others/LedStrip_APA102/LedStrip.md)
 LedStripEffects | __Working__    | [Package](https://www.nuget.org/packages/Bauland.Others.LedStripEffects/) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Others/LedStripEffects/LedStripEffects.md)
+<!-- 
 RC522 Rfid      | :construction: |                                                                                                                          | Not yet
+-->
 
 ***
 :construction: : Work In Progress
