@@ -38,26 +38,31 @@ namespace Bauland.Others
         public int Size { get; }
 
         /// <summary>
+        /// Value of maximum intensity
+        /// </summary>
+        public const int IntensityMax = (0xff >> 3);
+
+        /// <summary>
         /// Constructor of LedStrip
         /// </summary>
         /// <param name="size">Size of strip in led number</param>
         /// <param name="spiBus">Id of spi bus</param>
-        /// <param name="chipSelect">ChipSelect pin. May be a dummy pin (as not connected) as it don't be used</param>
         /// <param name="order">Order of colors</param>
         /// <param name="frequency">Frequency of spi bus (default 4M).</param>
         /// <param name="spiMode">Mode of spi bus (default Mode0)</param>
-        public LedStrip(int size, string spiBus, int chipSelect, ColorOrder order, int frequency = 4 * 1000 * 1000, SpiMode spiMode = SpiMode.Mode0)
+        public LedStrip(int size, string spiBus, ColorOrder order, int frequency = 4 * 1000 * 1000, SpiMode spiMode = SpiMode.Mode0)
         {
             if (size < 1) throw new ArgumentOutOfRangeException(nameof(size), "must be greater than 0");
             Size = size;
             _leds = new Led[size];
             for (int i = 0; i < size; i++)
                 _leds[i] = new Led(order);
-            _dummy = new byte[4 + 4 * size + size / 8 / 2];
-            _data = new byte[4 + 4 * size + size / 8 / 2];
+            var nbBytes = 4 + 4 * size + (size >> 4)+1;
+            _dummy = new byte[nbBytes];
+            _data = new byte[nbBytes];
             SpiConnectionSettings settings = new SpiConnectionSettings()
             {
-                ChipSelectLine = chipSelect,
+                ChipSelectType = SpiChipSelectType.None,
                 DataBitLength = 8,
                 ClockFrequency = frequency,
                 Mode = spiMode
