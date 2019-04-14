@@ -14,7 +14,7 @@
     <releaseNotes>Initial release of the package.</releaseNotes>
     <copyright>Copyright 2017-2019</copyright>
     <tags>TinyClr Adafruit Tft display shield</tags>
-    <license type="file">license/license.txt</license>
+    <license type="file">license.txt</license>
     <dependencies>
       <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0" />
     </dependencies>
@@ -22,6 +22,6 @@
   <files>
     <file src="TftDisplayShield.html" target="" />
     <file src="Adafruit-TftDisplayShield-Netduino3.jpg" target="" />
-    <file src="../../../license.txt" target="license/license.txt" />
+    <file src="../../../license.txt" target="license.txt" />
   </files>
 </package>

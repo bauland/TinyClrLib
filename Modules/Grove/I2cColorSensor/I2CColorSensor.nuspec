@@ -9,11 +9,11 @@
     <iconUrl>http://www.bauland.fr/Content/img/Logo-NuGet.png</iconUrl>
     <projectUrl>https://github.com/bauland/TinyClrLib</projectUrl>
     <language>en-US</language>
-    <licenseUrl>http://www.bauland.fr/Content/License.txt</licenseUrl>
+    <license type="file">license.txt</license>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Initial release of the package.</releaseNotes>
-    <copyright>Copyright 2017-2018</copyright>
+    <copyright>Copyright 2017-2019</copyright>
     <tags>TinyClr Grove I2cColorSensor Ranger</tags>
     <dependencies>
       <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0" />
@@ -23,5 +23,5 @@
     <!-- Add documentation and image -->
     <file src="I2cColorSensor.html" target="" />
     <file src="I2cColorSensor-FEZPandaIII-with-BaseShield.jpg" target="" />
-  </files>
+      <file src="../../../license.txt" target="license.txt" /></files>
 </package>

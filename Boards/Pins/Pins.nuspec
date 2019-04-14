@@ -9,14 +9,18 @@
     <iconUrl>http://www.bauland.fr/Content/img/Logo-NuGet.png</iconUrl>
     <projectUrl>https://github.com/bauland/TinyClrLib</projectUrl>
     <language>en-US</language>
-    <licenseUrl>http://www.bauland.fr/Content/License.txt</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Initial release of the package.</releaseNotes>
-    <copyright>Copyright 2017-2018</copyright>
+    <copyright>Copyright 2017-2019</copyright>
+    <license type="file">license.txt</license>
     <tags>TinyClr Pins Electron Netduino3</tags>
     <dependencies>
       <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0" />
+      <dependency id="GHIElectronics.TinyCLR.Pins" version="1.0.0" />
     </dependencies>
   </metadata>
+  <files>
+    <file src="..\..\license.txt" target="" />
+  </files>
 </package>

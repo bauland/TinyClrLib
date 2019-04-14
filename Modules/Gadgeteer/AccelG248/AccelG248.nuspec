@@ -12,9 +12,9 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Initial release of the package.</releaseNotes>
-    <copyright>Copyright 2017-2018</copyright>
+    <copyright>Copyright 2017-2019</copyright>
     <tags>TinyClr Gadgeteer AccelG248</tags>
-    <license type="file">license/license.txt</license>
+    <license type="file">license.txt</license>
     <dependencies>
       <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0" />
       <dependency id="GHIElectronics.TinyCLR.Devices.Gpio" version="1.0.0" />
@@ -24,6 +24,6 @@
   <files>
     <file src="AccelG248.html" target="" />
     <file src="Gadgeteer-AccelG248-Cerberus.jpg" target="" />
-    <file src="../../../license.txt" target="license/license.txt" />
+    <file src="../../../license.txt" target="license.txt" />
   </files>
 </package>
