@@ -71,7 +71,14 @@ namespace Bauland.Gadgeteer
             _backlightPin.SetDriveMode(GpioPinDriveMode.Output);
             _backlightPin.Write(GpioPinValue.Low);
 
-            _spi = SpiController.FromName(spiLine).GetDevice(new SpiConnectionSettings() {ChipSelectLine = chipSelectPin, ClockFrequency = 12000000, DataBitLength = 8, Mode = SpiMode.Mode0 });
+            _spi = SpiController.FromName(spiLine).GetDevice(new SpiConnectionSettings()
+            {
+                ChipSelectType = SpiChipSelectType.Gpio,
+                ChipSelectLine = chipSelectPin,
+                ClockFrequency = 12000000,
+                DataBitLength = 8,
+                Mode = SpiMode.Mode0
+            });
 
             Reset();
 
