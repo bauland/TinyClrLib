@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Diagnostics;
+using System.Threading;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Spi;
 using Bauland.Others.Constants.MfRc522;
@@ -13,9 +14,13 @@ namespace Bauland.Others
         private GpioPin _resetPin;
         private GpioPin _irqPin; // Can be null
         private SpiDevice _spi;
+        private byte[] _registerWriteBuffer;
+        private byte[] _dummyBuffer2;
 
         public MfRc522(string spiBus, int resetPin, int csPin, int irqPin = -1)
         {
+            _dummyBuffer2=new byte[2];
+            _registerWriteBuffer=new byte[2];
 
             var gpioCtl = GpioController.GetDefault();
 
@@ -35,7 +40,7 @@ namespace Bauland.Others
                 ChipSelectActiveState = false,
                 ChipSelectLine = csPin,
                 ChipSelectType = SpiChipSelectType.Gpio,
-                ClockFrequency = 2_000_000,
+                ClockFrequency = 10_000_000,
                 DataBitLength = 8,
                 Mode = SpiMode.Mode0
             };
@@ -59,7 +64,9 @@ namespace Bauland.Others
 
         private void WriteRegister(byte register, byte data)
         {
-            throw new System.NotImplementedException();
+            _registerWriteBuffer[0] = register;
+            _registerWriteBuffer[1] = 0x00;
+            _spi.TransferFullDuplex(_registerWriteBuffer,_dummyBuffer2);
         }
 
         private void EnableAntennaOn()
@@ -77,7 +84,7 @@ namespace Bauland.Others
 
         private void _irqPin_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            Debug.WriteLine("Irq change: " + (e.Edge == GpioPinEdge.FallingEdge ? "Falling" : "Raising"));
         }
     }
 }
