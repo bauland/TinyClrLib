@@ -63,15 +63,37 @@ namespace Bauland.Others
 
         public enum UidType
         {
-            T4,
-            T7,
-            T10
+            T4 = 4,
+            T7 = 7,
+            T10 = 10
         }
+
+        public enum PiccType
+        {
+            Unknown,
+            Mifare1K,
+            MifareUltralight
+        }
+
         public class Uid
         {
             public UidType UidType { get; set; }
             public byte[] UidBytes { get; set; }
             public byte Sak { get; set; }
+
+            public PiccType GetPiccType()
+            {
+                var sak = Sak & 0x7f;
+                switch (sak)
+                {
+                    case 0x08:
+                        return PiccType.Mifare1K;
+                    case 0x00:
+                        return PiccType.MifareUltralight;
+                    default:
+                        return PiccType.Unknown;
+                }
+            }
         }
     }
 }

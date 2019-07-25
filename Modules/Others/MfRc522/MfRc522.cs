@@ -4,6 +4,7 @@ using System.Threading;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Spi;
 using Bauland.Others.Constants.MfRc522;
+// ReSharper disable TooWideLocalVariableScope
 
 namespace Bauland.Others
 {
@@ -95,21 +96,44 @@ namespace Bauland.Others
             return null;
         }
 
-        private StatusCode PiccSelect(out Uid uid, byte validBits = 0)
+        private StatusCode PiccSelect(out Uid uid)
         {
             uid = new Uid();
             bool selectDone = false;
             int bitKnown = 0;
-            var uidKnown = new byte[7];
-            byte[] bufferBack = null;
+            var uidKnown = new byte[4];
+            var tempUid = new byte[10];
+            byte[] bufferBack;
             ClearRegisterBit(Register.Coll, 0x80);
+            int selectCascadeLevel = 1;
+            int destinationIndex;
             while (!selectDone)
             {
                 var bufferLength = bitKnown == 0 ? 2 : 9;
                 var buffer = new byte[bufferLength];
                 bufferBack = bitKnown == 0 ? new byte[5] : new byte[3];
                 byte nvb = (byte)(bitKnown == 0 ? 0x20 : 0x70);
-                buffer[0] = (byte)PiccCommand.SelCl1;
+                switch (selectCascadeLevel)
+                {
+                    case 1:
+                        buffer[0] = (byte)PiccCommand.SelCl1;
+                        uid.UidType = UidType.T4;
+                        destinationIndex = 0;
+                        break;
+                    case 2:
+                        buffer[0] = (byte)PiccCommand.SelCl2;
+                        uid.UidType = UidType.T7;
+                        destinationIndex = 3;
+                        break;
+                    case 3:
+                        buffer[0] = (byte)PiccCommand.SelCl3;
+                        uid.UidType = UidType.T10;
+                        destinationIndex = 6;
+                        break;
+                    default:
+                        return StatusCode.Error;
+                }
+                //buffer[0] = (byte)PiccCommand.SelCl1;
                 buffer[1] = nvb;
                 if (bitKnown != 0)
                 {
@@ -129,21 +153,41 @@ namespace Bauland.Others
 
                 StatusCode sc = TransceiveData(buffer, bufferBack, ref validbits);
                 if (sc != StatusCode.Ok)
-                    return sc; // TODO: add collision
+                {
+                    return sc;
+                }
+
                 if (sc == StatusCode.Ok)
                 {
                     if (bitKnown >= 32)
                     // We know all bits
                     {
-                        selectDone = true;
-                        uid.UidType = UidType.T4;
-                        uid.UidBytes=new byte[4];
-                        Array.Copy(buffer, 2, uid.UidBytes, 0, 4);
-                        uid.Sak = bufferBack[0];
+
+                        if (buffer[2] == 0x88) // Cascade Tag
+                        {
+                            // check CascadeTag with SAK
+                            var check = bufferBack[0] & 0x04;
+                            if (check != 0x04) return StatusCode.Error;
+                            // backup uid for CascadeLevel
+                            Array.Copy(buffer, 3, tempUid, destinationIndex, 3);
+                            selectCascadeLevel++;
+
+                            // Clear bit know and redo REQ with next CascadeLevel
+                            bitKnown = 0;
+                        }
+                        else
+                        {
+                            selectDone = true;
+                            Array.Copy(buffer, 2, tempUid, destinationIndex, 4);
+                            uid.Sak = bufferBack[0];
+                            var check = bufferBack[0] & 0x04;
+                            if (check == 0x04) return StatusCode.Error;
+
+                        }
                     }
                     else
                     {
-                        // All bit are known, redo loop to so SELECT
+                        // All bit are known, redo loop to do SELECT
                         bitKnown = 32;
                         // Save
                         for (int i = 0; i < 4; i++) // 5 is BCC
@@ -153,19 +197,21 @@ namespace Bauland.Others
                     }
                 }
             }
+            // Create Uid with collected infos
+            uid.UidBytes = new byte[(int)uid.UidType];
+            Array.Copy(tempUid, uid.UidBytes, uid.UidBytes.Length);
             return StatusCode.Ok;
         }
 
+        [ConditionalAttribute("MYDEBUG")]
         private void DisplayBuffer(byte[] buffer)
         {
-#if DEBUG2            
             Debug.WriteLine("#Data:");
             Debug.WriteLine($"Length: {buffer.Length}");
             var str = "";
             for (int i = 0; i < buffer.Length; i++)
                 str += $"{buffer[i]:X2} ";
             Debug.WriteLine($"{str}");
-#endif
         }
 
         private StatusCode PiccRequestA(byte[] bufferAtqa)
@@ -190,11 +236,11 @@ namespace Bauland.Others
             return CommunicateWithPicc(PcdCommand.Transceive, waitIrq, buffer, bufferBack, ref validBits);
         }
 
-        private StatusCode CommunicateWithPicc(PcdCommand cmd, byte waitIrq, byte[] sendData, byte[] backData, ref byte validBits, byte rxAlign = 0, bool crcCheck = false)
+        private StatusCode CommunicateWithPicc(PcdCommand cmd, byte waitIrq, byte[] sendData, byte[] backData, ref byte validBits/*, byte rxAlign = 0, bool crcCheck = false*/)
         {
 
             byte txLastBits = validBits;
-            byte bitFraming = (byte)((rxAlign << 4) + txLastBits);
+            byte bitFraming = txLastBits;
 
             WriteRegister(Register.Command, (byte)PcdCommand.Idle);
             WriteRegister(Register.ComIrq, 0x7f);
@@ -224,7 +270,7 @@ namespace Bauland.Others
                 byte n = ReadRegister(Register.FifoLevel);
                 if (n > backData.Length) return StatusCode.NoRoom;
                 // if (n < backData.Length) return StatusCode.Error;
-                ReadRegister(Register.FifoData, backData, rxAlign);
+                ReadRegister(Register.FifoData, backData);
 
                 DisplayBuffer(backData);
 
@@ -234,11 +280,6 @@ namespace Bauland.Others
             // Check collision
             if ((byte)(error & 0x08) == 0x08) return StatusCode.Collision;
 
-            // TODO:Do CrcA validation if request
-            if (crcCheck)
-            {
-
-            }
             return StatusCode.Ok;
         }
         public byte GetVersion()
@@ -286,16 +327,15 @@ namespace Bauland.Others
 
         private StatusCode WaitForCommandComplete(byte waitIrq)
         {
-            for (int i = 2000; i > 0; i--)
+            for (int i = 200; i > 0; i--)
             {
                 byte n = ReadRegister(Register.ComIrq);
                 if ((n & waitIrq) != 0)
                     return StatusCode.Ok;
-                //TODO: not use irq timer
-                //if ((n & 0x01) == 0x01)
-                //{
-                //    return StatusCode.Timeout;
-                //}
+                if ((n & 0x01) == 0x01)
+                {
+                    return StatusCode.Timeout;
+                }
             }
             return StatusCode.Timeout;
         }
@@ -333,16 +373,13 @@ namespace Bauland.Others
             return _dummyBuffer2[1];
         }
 
-        private void ReadRegister(Register register, byte[] backData, byte rxAlign = 0)
+        private void ReadRegister(Register register, byte[] backData)
         {
             if (backData == null || backData.Length == 0) return;
             byte address = (byte)((byte)register | 0x80);
             byte[] writeBuffer = new byte[backData.Length + 1];
             byte[] readBuffer = new byte[backData.Length + 1];
-            if (rxAlign != 0)
-            {
-                // TODO: to complete
-            }
+
             for (int i = 0; i < backData.Length; i++) writeBuffer[i] = address;
             _spi.TransferFullDuplex(writeBuffer, readBuffer);
             Array.Copy(readBuffer, 1, backData, 0, backData.Length);
