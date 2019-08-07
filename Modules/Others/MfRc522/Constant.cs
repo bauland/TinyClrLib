@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Text;
-using System.Threading;
-
-namespace Bauland.Others
+﻿namespace Bauland.Others
 {
     namespace Constants.MfRc522
     {
@@ -14,6 +9,8 @@ namespace Bauland.Others
             ComIrq = 0x04 << 1,
             DivIrq = 0x05 << 1,
             Error = 0x06 << 1,
+            Status1 = 0x07 << 1,
+            Status2 = 0x08 << 1,
             FifoData = 0x09 << 1,
             FifoLevel = 0x0A << 1,
             Control = 0x0C << 1,
@@ -24,16 +21,16 @@ namespace Bauland.Others
             TxMode = 0x12 << 1,
             RxMode = 0x13 << 1,
             TxControl = 0x14 << 1,
-            TxASK = 0x15 << 1,
+            TxAsk = 0x15 << 1,
             Version = 0x37 << 1,
 
             CrcResultHigh = 0x21 << 1,
             CrcResultLow = 0x22 << 1,
             ModeWith = 0x24 << 1,
-            TMode = 0x2A << 1,
-            TPrescaler = 0x2B << 1,
-            TReloadH = 0x2C << 1,
-            TReloadL = 0x2D << 1,
+            TimerMode = 0x2A << 1,
+            TimerPrescaler = 0x2B << 1,
+            TimerReloadHigh = 0x2C << 1,
+            TimerReloadLow = 0x2D << 1,
         }
 
         public enum StatusCode
@@ -48,7 +45,9 @@ namespace Bauland.Others
         public enum PiccCommand
         {
             ReqA = 0x26,
+            MifareRead = 0x30,
             HaltA = 0x50,
+            AuthenticateKeyA = 0x60,
             SelCl1 = 0x93,
             SelCl2 = 0x95,
             SelCl3 = 0x97,
@@ -56,9 +55,10 @@ namespace Bauland.Others
 
         public enum PcdCommand
         {
-            Transceive = 0x0c,
             Idle = 0x00,
             CalculateCrc = 0x03,
+            Transceive = 0x0c,
+            MfAuthenticate = 0xe,
         }
 
         public enum UidType

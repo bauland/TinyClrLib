@@ -56,13 +56,13 @@ namespace Bauland.Others
         private void SetDefaultValues()
         {
             // Set Timer for Timeout
-            WriteRegister(Register.TMode, 0x80);
-            WriteRegister(Register.TPrescaler, 0xA9);
-            WriteRegister(Register.TReloadH, 0x06);
-            WriteRegister(Register.TReloadL, 0xE8);
+            WriteRegister(Register.TimerMode, 0x80);
+            WriteRegister(Register.TimerPrescaler, 0xA9);
+            WriteRegister(Register.TimerReloadHigh, 0x06);
+            WriteRegister(Register.TimerReloadLow, 0xE8);
 
             // Force 100% Modulation
-            WriteRegister(Register.TxASK, 0x40);
+            WriteRegister(Register.TxAsk, 0x40);
 
             // Set CRC to 0x6363 (iso 14443-3 6.1.6)
             WriteRegister(Register.Mode, 0x3D);
@@ -262,7 +262,7 @@ namespace Bauland.Others
 
             // Stop if BufferOverflow, Parity or Protocol error
             byte error = ReadRegister(Register.Error);
-            if ((byte)(error & 0x13) == 0x13) return StatusCode.Error;
+            if ((byte)(error & 0x13) != 0x00) return StatusCode.Error;
 
             // Get data back from Mfrc522
             if (backData != null)
@@ -301,6 +301,32 @@ namespace Bauland.Others
             return sc;
         }
 
+        public void StopCrypto()
+        {
+            ClearRegisterBit(Register.Status2, 0x08);
+        }
+
+        public StatusCode Authenticate(Uid uid, byte[] key, byte blockAddress)
+        {
+            if (key.Length != 6) throw new ArgumentException("Key must have a length of 6.", nameof(key));
+            byte waitIrq = 0x10;
+            byte validBits = 0;
+            byte[] buffer = new byte[12];
+            buffer[0] = (byte)PiccCommand.AuthenticateKeyA;
+            buffer[1] = blockAddress;
+            // set key
+            for (int i = 0; i < 6; i++)
+            {
+                buffer[i + 2] = key[i];
+            }
+            // set uid
+            for (int i = 0; i < 4; i++)
+            {
+                buffer[i + 8] = uid.UidBytes[uid.UidType == UidType.T4 ? i : i + 3];
+            }
+
+            return CommunicateWithPicc(PcdCommand.MfAuthenticate, waitIrq, buffer, null, ref validBits);
+        }
         private StatusCode CalculateCrc(byte[] buffer, int lengthBuffer, byte[] bufferBack, int indexBufferBack)
         {
             byte[] shortBuffer = new byte[lengthBuffer];
