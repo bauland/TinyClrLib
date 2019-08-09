@@ -282,6 +282,86 @@ namespace Bauland.Others
 
             return StatusCode.Ok;
         }
+
+        public byte[][] GetSector(Uid uid, byte sector, byte[] key, PiccCommand authenticateType = PiccCommand.AuthenticateKeyA)
+        {
+            if (key == null || key.Length != 6) throw new ArgumentException("Key must be a byte[] of length 6.", nameof(key));
+            switch (uid.GetPiccType())
+            {
+                case PiccType.Mifare1K:
+                    return GetMifare1KSector(uid, sector, key, authenticateType);
+                //case PiccType.MifareUltralight:
+                //    return GetMifareUltraLight(uid, sector, key, authenticateType);
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private byte[][] GetMifare1KSector(Uid uid, byte sector, byte[] key, PiccCommand cmd = PiccCommand.AuthenticateKeyA)
+        {
+            if (sector > 15) throw new ArgumentOutOfRangeException(nameof(sector), "Sector must be between 0 and 16.");
+            byte numberOfBlocks = 4;
+            var firstblock = sector * numberOfBlocks;
+            var isTrailerBlock = true;
+            byte[] buffer = new byte[18];
+            byte[][] returnBuffer = new byte[4][];
+            for (int i = 0; i < 4; i++)
+            {
+                returnBuffer[i] = new byte[16];
+            }
+            StatusCode sc;
+            for (int i = numberOfBlocks - 1; i >= 0; i--)
+            {
+                var blockAddr = (byte)(firstblock + i);
+                if (isTrailerBlock)
+                {
+                    sc = Authenticate(uid, key, blockAddr, cmd);
+                    if (sc != StatusCode.Ok) throw new Exception($"Authenticate() failed:{sc}");
+                }
+                // Read block
+                sc = MifareRead(blockAddr, buffer);
+                if (sc != StatusCode.Ok) throw new Exception($"MifareRead() failed:{sc}");
+                if (isTrailerBlock)
+                {
+                    isTrailerBlock = false;
+                }
+                Array.Copy(buffer, returnBuffer[i], 16);
+            }
+            return returnBuffer;
+        }
+
+        private StatusCode MifareRead(byte blockAddr, byte[] buffer)
+        {
+            byte[] cmdBuffer = new byte[4];
+            if (buffer == null || buffer.Length != 18) return StatusCode.NoRoom;
+            cmdBuffer[0] = (byte)PiccCommand.MifareRead;
+            cmdBuffer[1] = blockAddr;
+            var sc = CalculateCrc(cmdBuffer, 2, cmdBuffer, 2);
+            if (sc != StatusCode.Ok) return sc;
+            byte validBits = 0;
+
+            sc = TransceiveData(cmdBuffer, buffer, ref validBits);
+            if (sc != StatusCode.Ok) return sc;
+
+            // Check CRC
+            byte[] crc = new byte[2];
+            sc = CalculateCrc(buffer, 16, crc, 0);
+            if (sc != StatusCode.Ok) return sc;
+            if (buffer[16] == crc[0] && buffer[17] == crc[1]) return StatusCode.Ok;
+            return StatusCode.CrcError;
+        }
+
+        public byte[] GetAccessRights(byte[][] sector)
+        {
+            byte[] c = new byte[3];
+            if (sector.Length != 4) throw new ArgumentOutOfRangeException(nameof(sector), "Must content 4 blocks.");
+            c[0] = (byte)(sector[3][7] >> 4);
+            c[1] = (byte)(sector[3][8] & 0x0f);
+            c[2] = (byte)(sector[3][8] >> 4);
+
+            return c;
+        }
+
         public byte GetVersion()
         {
             return ReadRegister(Register.Version);
@@ -306,13 +386,16 @@ namespace Bauland.Others
             ClearRegisterBit(Register.Status2, 0x08);
         }
 
-        public StatusCode Authenticate(Uid uid, byte[] key, byte blockAddress)
+        public StatusCode Authenticate(Uid uid, byte[] key, byte blockAddress, PiccCommand cmd)
         {
+            if (cmd != PiccCommand.AuthenticateKeyA && cmd != PiccCommand.AuthenticateKeyB)
+                throw new ArgumentException("Must be AuthenticateA or AuthenticateB only");
+
             if (key.Length != 6) throw new ArgumentException("Key must have a length of 6.", nameof(key));
             byte waitIrq = 0x10;
             byte validBits = 0;
             byte[] buffer = new byte[12];
-            buffer[0] = (byte)PiccCommand.AuthenticateKeyA;
+            buffer[0] = (byte)cmd;
             buffer[1] = blockAddress;
             // set key
             for (int i = 0; i < 6; i++)
@@ -327,6 +410,15 @@ namespace Bauland.Others
 
             return CommunicateWithPicc(PcdCommand.MfAuthenticate, waitIrq, buffer, null, ref validBits);
         }
+
+        /// <summary>
+        /// Calculate Crc of a buffer
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="lengthBuffer"></param>
+        /// <param name="bufferBack"></param>
+        /// <param name="indexBufferBack"></param>
+        /// <returns></returns>
         private StatusCode CalculateCrc(byte[] buffer, int lengthBuffer, byte[] bufferBack, int indexBufferBack)
         {
             byte[] shortBuffer = new byte[lengthBuffer];
@@ -391,7 +483,7 @@ namespace Bauland.Others
             }
         }
 
-        public byte ReadRegister(Register register)
+        private byte ReadRegister(Register register)
         {
             _registerWriteBuffer[0] = (byte)((byte)register | 0x80);
             _registerWriteBuffer[1] = 0x00;

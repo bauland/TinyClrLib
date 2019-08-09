@@ -39,7 +39,8 @@
             Collision,
             Error,
             Timeout,
-            NoRoom
+            NoRoom,
+            CrcError
         }
 
         public enum PiccCommand
@@ -48,6 +49,7 @@
             MifareRead = 0x30,
             HaltA = 0x50,
             AuthenticateKeyA = 0x60,
+            AuthenticateKeyB = 0x61,
             SelCl1 = 0x93,
             SelCl2 = 0x95,
             SelCl3 = 0x97,
