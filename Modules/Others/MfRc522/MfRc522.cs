@@ -4,12 +4,13 @@ using System.Threading;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Spi;
 using Bauland.Others.Constants.MfRc522;
-// ReSharper disable TooWideLocalVariableScope
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
 
 namespace Bauland.Others
 {
     /// <summary>
-    /// 
+    /// MfRc522 module
     /// </summary>
     public class MfRc522
     {
@@ -19,7 +20,13 @@ namespace Bauland.Others
         private readonly byte[] _registerWriteBuffer;
         private readonly byte[] _dummyBuffer2;
 
-        public MfRc522(string spiBus, int resetPin, int csPin/*, int irqPin = -1*/)
+        /// <summary>
+        /// Constructor of MfRc522 module
+        /// </summary>
+        /// <param name="spiBus">Spi bus</param>
+        /// <param name="resetPin">Reset Pin (RST)</param>
+        /// <param name="csPin">ChipSelect Pin(SDA)</param>
+        public MfRc522(string spiBus, int resetPin, int csPin)
         {
             _dummyBuffer2 = new byte[2];
             _registerWriteBuffer = new byte[2];
@@ -75,11 +82,11 @@ namespace Bauland.Others
             SetRegisterBit(Register.TxControl, 0x03);
         }
 
-        //private void EnableAntennaOff()
-        //{
-        //    ClearRegisterBit(Register.TxControl, 0x03);
-        //}
-
+        /// <summary>
+        /// Check if a new card is present
+        /// </summary>
+        /// <param name="bufferAtqa"> return a buffer of 2 bytes with ATQA answer</param>
+        /// <returns>true if there is a new card, else false</returns>
         public bool IsNewCardPresent(byte[] bufferAtqa)
         {
             if (bufferAtqa == null || bufferAtqa.Length != 2) throw new ArgumentException("bufferAtqa must be initialized and its size must be 2.", nameof(bufferAtqa));
@@ -88,6 +95,10 @@ namespace Bauland.Others
             return false;
         }
 
+        /// <summary>
+        /// Get serial of card
+        /// </summary>
+        /// <returns>Get Uid of card (which contains type)</returns>
         public Uid PiccReadCardSerial()
         {
             StatusCode sc = PiccSelect(out Uid uid);
@@ -103,16 +114,15 @@ namespace Bauland.Others
             int bitKnown = 0;
             var uidKnown = new byte[4];
             var tempUid = new byte[10];
-            byte[] bufferBack;
             ClearRegisterBit(Register.Coll, 0x80);
             int selectCascadeLevel = 1;
-            int destinationIndex;
             while (!selectDone)
             {
                 var bufferLength = bitKnown == 0 ? 2 : 9;
                 var buffer = new byte[bufferLength];
-                bufferBack = bitKnown == 0 ? new byte[5] : new byte[3];
+                var bufferBack = bitKnown == 0 ? new byte[5] : new byte[3];
                 byte nvb = (byte)(bitKnown == 0 ? 0x20 : 0x70);
+                int destinationIndex;
                 switch (selectCascadeLevel)
                 {
                     case 1:
@@ -182,7 +192,6 @@ namespace Bauland.Others
                             uid.Sak = bufferBack[0];
                             var check = bufferBack[0] & 0x04;
                             if (check == 0x04) return StatusCode.Error;
-
                         }
                     }
                     else
@@ -283,18 +292,40 @@ namespace Bauland.Others
             return StatusCode.Ok;
         }
 
-        public byte[][] GetSector(Uid uid, byte sector, byte[] key, PiccCommand authenticateType = PiccCommand.AuthenticateKeyA)
+        /// <summary>
+        /// Read a page or a sector of a card
+        /// </summary>
+        /// <param name="uid"> uid of card to read</param>
+        /// <param name="pageOrSector"> number of page or sector to read</param>
+        /// <param name="key">key to authenticate (not used with Ultralight)</param>
+        /// <param name="authenticateType">type of authentication (not used with Ultralight): A (default) or B</param>
+        /// <returns></returns>
+        public byte[][] GetSector(Uid uid, byte pageOrSector, byte[] key, PiccCommand authenticateType = PiccCommand.AuthenticateKeyA)
         {
             if (key == null || key.Length != 6) throw new ArgumentException("Key must be a byte[] of length 6.", nameof(key));
             switch (uid.GetPiccType())
             {
                 case PiccType.Mifare1K:
-                    return GetMifare1KSector(uid, sector, key, authenticateType);
-                //case PiccType.MifareUltralight:
-                //    return GetMifareUltraLight(uid, sector, key, authenticateType);
+                    return GetMifare1KSector(uid, pageOrSector, key, authenticateType);
+                case PiccType.MifareUltralight:
+                    return GetMifareUltraLight(pageOrSector);
                 default:
-                    throw new NotImplementedException();
+                    return null;
             }
+        }
+
+        private byte[][] GetMifareUltraLight(byte page)
+        {
+
+            byte[] buffer = new byte[18];
+            byte[][] resultBuffer = new byte[4][];
+            for (int i = 0; i < 4; i++)
+                resultBuffer[i] = new byte[4];
+            var sc = MifareRead((byte)(page * 4), buffer);
+            if (sc != StatusCode.Ok) throw new Exception($"MifareRead() failed:{sc}");
+            for (int j = 0; j < 4; j++)
+                Array.Copy(buffer, j * 4, resultBuffer[j], 0, 4);
+            return resultBuffer;
         }
 
         private byte[][] GetMifare1KSector(Uid uid, byte sector, byte[] key, PiccCommand cmd = PiccCommand.AuthenticateKeyA)
@@ -309,10 +340,11 @@ namespace Bauland.Others
             {
                 returnBuffer[i] = new byte[16];
             }
-            StatusCode sc;
+
             for (int i = numberOfBlocks - 1; i >= 0; i--)
             {
                 var blockAddr = (byte)(firstblock + i);
+                StatusCode sc;
                 if (isTrailerBlock)
                 {
                     sc = Authenticate(uid, key, blockAddr, cmd);
@@ -351,6 +383,11 @@ namespace Bauland.Others
             return StatusCode.CrcError;
         }
 
+        /// <summary>
+        /// Get access bytes from sector of 1k card
+        /// </summary>
+        /// <param name="sector">byte array contains sector informations (must be a 4 * 16 bytes array)</param>
+        /// <returns></returns>
         public byte[] GetAccessRights(byte[][] sector)
         {
             byte[] c = new byte[3];
@@ -362,11 +399,19 @@ namespace Bauland.Others
             return c;
         }
 
+        /// <summary>
+        /// Get version of reader
+        /// </summary>
+        /// <returns>Number of version</returns>
         public byte GetVersion()
         {
             return ReadRegister(Register.Version);
         }
 
+        /// <summary>
+        /// Stop to communicate with a card
+        /// </summary>
+        /// <returns>Status code</returns>
         public StatusCode Halt()
         {
             byte[] buffer = new byte[4];
@@ -381,11 +426,22 @@ namespace Bauland.Others
             return sc;
         }
 
+        /// <summary>
+        /// Stop to use crypto1 with communication. Must be called after Halt() when sector have been authenticate.
+        /// </summary>
         public void StopCrypto()
         {
             ClearRegisterBit(Register.Status2, 0x08);
         }
 
+        /// <summary>
+        /// Authenticate to access sector
+        /// </summary>
+        /// <param name="uid">Uid of the card to access</param>
+        /// <param name="key">Key to access (must be a array of 6 bytes)</param>
+        /// <param name="blockAddress">Address of block (not sector !)</param>
+        /// <param name="cmd">Type of authentication (Must be AuthenticateKeyA or AuthenticateKeyB)</param>
+        /// <returns></returns>
         public StatusCode Authenticate(Uid uid, byte[] key, byte blockAddress, PiccCommand cmd)
         {
             if (cmd != PiccCommand.AuthenticateKeyA && cmd != PiccCommand.AuthenticateKeyB)

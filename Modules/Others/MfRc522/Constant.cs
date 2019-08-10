@@ -1,7 +1,13 @@
-﻿namespace Bauland.Others
+﻿// ReSharper disable UnusedMember.Global
+#pragma warning disable 1591
+
+namespace Bauland.Others
 {
     namespace Constants.MfRc522
     {
+        /// <summary>
+        /// Address of register
+        /// </summary>
         public enum Register
         {
             // Command and status
@@ -33,6 +39,9 @@
             TimerReloadLow = 0x2D << 1,
         }
 
+        /// <summary>
+        /// Return code of some functions
+        /// </summary>
         public enum StatusCode
         {
             Ok,
@@ -43,6 +52,9 @@
             CrcError
         }
 
+        /// <summary>
+        /// Command to send to picc (card)
+        /// </summary>
         public enum PiccCommand
         {
             ReqA = 0x26,
@@ -55,6 +67,9 @@
             SelCl3 = 0x97,
         }
 
+        /// <summary>
+        /// Command of reader
+        /// </summary>
         public enum PcdCommand
         {
             Idle = 0x00,
@@ -63,6 +78,9 @@
             MfAuthenticate = 0xe,
         }
 
+        /// <summary>
+        /// Length of uid
+        /// </summary>
         public enum UidType
         {
             T4 = 4,
@@ -70,6 +88,9 @@
             T10 = 10
         }
 
+        /// <summary>
+        /// Type of card
+        /// </summary>
         public enum PiccType
         {
             Unknown,
@@ -77,12 +98,30 @@
             MifareUltralight
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public class Uid
         {
+            /// <summary>
+            /// Lentgh of uid (can be 4, 7 or 10 bytes length)
+            /// </summary>
             public UidType UidType { get; set; }
+
+            /// <summary>
+            /// Contain uid of card (can be 4, 7 or 10 bytes length)
+            /// </summary>
             public byte[] UidBytes { get; set; }
+
+            /// <summary>
+            /// Sak which contains usefull informations
+            /// </summary>
             public byte Sak { get; set; }
 
+            /// <summary>
+            /// Get type of card
+            /// </summary>
+            /// <returns>Type of card</returns>
             public PiccType GetPiccType()
             {
                 var sak = Sak & 0x7f;
