@@ -24,7 +24,7 @@ __Pins__ | Include some boards which don't appear in GHI.TinyClr.Pins | [Package
 Module              | State       | Package                                                                                             | Documentation
 ------------------- | ----------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------
 Color Sensor (1334) | __Working__ | [Package](https://www.nuget.org/packages/Bauland.Adafruit.ColorSensor1334/) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Adafruit/ColorSensor1334/ColorSensor1334.md) 
-NeoPixel (Stick, Shield ...) | __Working__ | [Package](https://www.nuget.org/packages/Bauland.Adafruit.NeoPixel/) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Adafruit/ColorSensor1334/ColorSensor1334.md) 
+NeoPixel (Stick, Shield ...) | __Working__ | [Package](https://www.nuget.org/packages/Bauland.Adafruit.NeoPixel/) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Adafruit/NeoPixel/NeoPixel.md) 
 Tft 1.8 Display Shield revB | __Working__ | [Package](https://www.nuget.org/packages/Bauland.Adafruit.TftDisplayShield/) | [Documentation](https://github.com/bauland/TinyClrLib/blob/master/Modules/Adafruit/TftDisplayShield/TftDisplayShield.md) 
 
 ### Gadgeteer
