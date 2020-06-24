@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 #if NANOFRAMEWORK
 using Windows.Devices.Gpio;
-using Windows.Devices.Spi
+using Windows.Devices.Spi;
 #else
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Spi;
