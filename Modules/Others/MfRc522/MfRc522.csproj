@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Mfrc522-ESP32.jpg" />
     <Content Include="Mfrc522-FEZ.jpg" />
     <Content Include="MfRc522.html">
       <DependentUpon>MfRc522.md</DependentUpon>

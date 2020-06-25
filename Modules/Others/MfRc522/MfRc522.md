@@ -16,6 +16,19 @@ SCK | 13
 MISO | 12
 MOSI | 11
 
+For ESP32 Dev. KIT V1 and nanoframework 
+
+![Schematic](Mfrc522-ESP32.jpg)
+
+Mfrc522 | Mainboard
+-------- | ----------
+GND | GND
+Vcc | 3.3V 
+RST | D4
+SDA | D5
+SCK | D19
+MISO | D25
+MOSI | D23
 
 ## Example of code:
 ```CSharp
@@ -24,8 +37,13 @@ using System.Diagnostics;
 using System.Threading;
 using Bauland.Others;
 using Bauland.Others.Constants.MfRc522;
+#if NANOFRAMEWORK
+using nanoFramework.Hardware.Esp32;
+#else
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Pins;
+#endif
+
 
 namespace testRC522
 {
@@ -34,7 +52,16 @@ namespace testRC522
         private static MfRc522 _mfRc522;
         static void Main()
         {
-            Setup();
+            Setup
+#if NANOFRAMEWORK
+			Debug.WriteLine("###############################################");
+            Debug.WriteLine("# SPI1");
+            Debug.WriteLine("###############################################");
+            Debug.WriteLine($"SPI1_CLOCK: " + Configuration.GetFunctionPin(DeviceFunction.SPI1_CLOCK));
+            Debug.WriteLine($"SPI1_MISO: " + Configuration.GetFunctionPin(DeviceFunction.SPI1_MISO));
+            Debug.WriteLine($"SPI1_MOSI: " + Configuration.GetFunctionPin(DeviceFunction.SPI1_MOSI));
+#endif
+
             Debug.WriteLine($"Version: 0x{_mfRc522.GetVersion():X}");
             InfiniteLoop();
         }
@@ -140,8 +167,12 @@ namespace testRC522
 
         private static void Setup()
         {
-
-            _mfRc522 = new MfRc522(FEZ.SpiBus.Spi1, FEZ.GpioPin.D8, FEZ.GpioPin.D9);
+#if NANOFRAMEWORK
+			_mfRc522 = new MfRc522("SPI1", 4, 5);
+#else
+			_mfRc522 = new MfRc522(FEZ.SpiBus.Spi1, FEZ.GpioPin.D8, FEZ.GpioPin.D9);
+#endif
+            
         }
     }
 }

@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+#if NANOFRAMEWORK
+using Windows.Devices.Gpio;
+using Windows.Devices.Spi;
+#else
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Spi;
+#endif
 using Bauland.Others.Constants.MfRc522;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
@@ -32,7 +37,6 @@ namespace Bauland.Others
             _registerWriteBuffer = new byte[2];
 
             var gpioCtl = GpioController.GetDefault();
-
             _resetPin = gpioCtl.OpenPin(resetPin);
             _resetPin.SetDriveMode(GpioPinDriveMode.Output);
             _resetPin.Write(GpioPinValue.High);
@@ -46,10 +50,14 @@ namespace Bauland.Others
 
             var settings = new SpiConnectionSettings()
             {
-                ChipSelectActiveState = false,
                 ChipSelectLine = csPin,
+#if NANOFRAMEWORK
+                ClockFrequency = 7_000_000, // Was 10_000_000 droppped due instabiities and bit rotate issues
+#else
+                ChipSelectActiveState = false,
                 ChipSelectType = SpiChipSelectType.Gpio,
                 ClockFrequency = 10_000_000,
+#endif
                 DataBitLength = 8,
                 Mode = SpiMode.Mode0
             };
@@ -522,7 +530,7 @@ namespace Bauland.Others
             Thread.Sleep(1);
         }
 
-        #region Basic Communication functions
+#region Basic Communication functions
 
         private void WriteRegister(Register register, byte data)
         {
@@ -570,7 +578,7 @@ namespace Bauland.Others
             var tmp = ReadRegister(register);
             WriteRegister(register, (byte)(tmp & ~mask));
         }
-        #endregion
+#endregion
 
     }
 }
