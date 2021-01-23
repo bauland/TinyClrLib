@@ -114,39 +114,27 @@ namespace Bauland.Adafruit
     /// </summary>
     public class SeeSaw
     {
-        private readonly I2cDevice _i2CDevice;
         private readonly bool _created;
-        private readonly byte[] _wBuffer = new byte[10];
-        private readonly byte[] _rBuffer = new byte[4];
+        private readonly I2cDevice _i2CDevice;
         private int _read;
-
-        #region definitions
-
-        #endregion
-
+        private readonly byte[] _rBuffer = new byte[4];
+        private readonly byte[] _wBuffer = new byte[10];
         /// <summary>
         /// Constructor of Seesaw device
         /// </summary>
         /// <param name="name">Name of i2c controller</param>
         /// <param name="address">Address of device</param>
         /// <exception cref="InvalidOperationException">Thrown if device can't be joined</exception>
-        protected SeeSaw(string name, int address)
+        public SeeSaw(string name, int address)
         {
             _created = false;
             if (_created) throw new InvalidOperationException("Create must be called only once, call Get() after.");
 
             var ctl = I2cController.FromName(name);
-            _i2CDevice = ctl.GetDevice(new I2cConnectionSettings(address, I2cAddressFormat.SevenBit, I2cBusSpeed.FastMode));
+            _i2CDevice = ctl.GetDevice(new I2cConnectionSettings(address, I2cAddressFormat.SevenBit, 400_000));
             SoftwareReset();
             if (!Check()) throw new InvalidOperationException($"Component not found: {name}-{address:X}");
             _created = true;
-        }
-
-        private void SoftwareReset()
-        {
-            _wBuffer[2] = 0xff;
-            Write(SeeSawBaseAddress.Status, SeeSawStatus.SoftwareReset, _wBuffer, 3);
-            Thread.Sleep(500);
         }
 
         private bool Check()
@@ -154,12 +142,16 @@ namespace Bauland.Adafruit
             var res = ReadByte(SeeSawBaseAddress.Status, SeeSawStatus.HardwareId);
             return res == SeeSawStatus.HardwareIdCode;
         }
-
-        private byte ReadByte(byte highReg, byte lowReg)
+        /// <summary>
+        /// Read pin values
+        /// </summary>
+        /// <param name="pins">pin(s) to be read</param>
+        /// <returns>current state of pins</returns>
+        protected int DigitalReadBulk(int pins)
         {
-            Write(highReg, lowReg, _wBuffer, 2);
-            _i2CDevice.Read(_rBuffer,0,1);
-            return _rBuffer[0];
+            Read(SeeSawBaseAddress.Gpio, SeeSawGpio.Bulk, _rBuffer);
+            _read = ((_rBuffer[0] << 24) | (_rBuffer[1] << 16) | _rBuffer[2] << 8 | _rBuffer[3]);
+            return pins & _read;
         }
 
         /// <summary>
@@ -176,7 +168,6 @@ namespace Bauland.Adafruit
             else
                 DigitalWriteBulk(1u << pin, value);
         }
-
         private void DigitalWriteBulk(uint pinsa, uint pinsb, bool value)
         {
             _wBuffer[2] = (byte)(pinsa >> 24);
@@ -214,7 +205,6 @@ namespace Bauland.Adafruit
                 PinModeBulk(1u << pin, mode);
         }
 
-
         /// <summary>
         /// Send mode pin to seesaw controller
         /// </summary>
@@ -242,6 +232,19 @@ namespace Bauland.Adafruit
             SetPinModeBulk(mode, _wBuffer, 10);
         }
 
+        private void Read(byte highRegistry, byte lowRegistry, byte[] data)
+        {
+            Write(highRegistry, lowRegistry, _wBuffer, 2);
+            _i2CDevice.Read(data);
+        }
+
+        private byte ReadByte(byte highReg, byte lowReg)
+        {
+            Write(highReg, lowReg, _wBuffer, 2);
+            _i2CDevice.Read(_rBuffer,0,1);
+            return _rBuffer[0];
+        }
+
         private void SetPinModeBulk(GpioPinDriveMode mode, byte[] cmd, int length)
         {
             switch (mode)
@@ -265,6 +268,12 @@ namespace Bauland.Adafruit
             }
         }
 
+        private void SoftwareReset()
+        {
+            _wBuffer[2] = 0xff;
+            Write(SeeSawBaseAddress.Status, SeeSawStatus.SoftwareReset, _wBuffer, 3);
+            Thread.Sleep(500);
+        }
         /// <summary>
         /// Write data to a registry. Data buffer must have 2 bytes more to let write high and low registry to it.
         /// </summary>
@@ -272,32 +281,13 @@ namespace Bauland.Adafruit
         /// <param name="lowRegistry">low value of registry</param>
         /// <param name="data">buffer of data to send to registry</param>
         /// <param name="length">length of data to send (buffer can me lengther to avoid a lot of buffer)</param>
-        protected void Write(byte highRegistry, byte lowRegistry, byte[] data, int length = 0)
+        public void Write(byte highRegistry, byte lowRegistry, byte[] data, int length = 0)
         {
             data[0] = highRegistry;
             data[1] = lowRegistry;
             if (length == 0)
                 _i2CDevice.Write(data);
             else _i2CDevice.Write(data, 0, length);
-        }
-
-
-        /// <summary>
-        /// Read pin values
-        /// </summary>
-        /// <param name="pins">pin(s) to be read</param>
-        /// <returns>current state of pins</returns>
-        protected int DigitalReadBulk(int pins)
-        {
-            Read(SeeSawBaseAddress.Gpio, SeeSawGpio.Bulk, _rBuffer);
-            _read = ((_rBuffer[0] << 24) | (_rBuffer[1] << 16) | _rBuffer[2] << 8 | _rBuffer[3]);
-            return pins & _read;
-        }
-
-        private void Read(byte highRegistry, byte lowRegistry, byte[] data)
-        {
-            Write(highRegistry, lowRegistry, _wBuffer, 2);
-            _i2CDevice.Read(data);
         }
     }
 }

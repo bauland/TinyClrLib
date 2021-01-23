@@ -10,8 +10,12 @@ SD card is not currently availabled as GHI library not allowed SPI connexions.
 </aside>
 
 ## Connections ##
-TftDisplayShield is connected as followed on [Netduino 3](https://www.wildernesslabs.co/netduino):
-![Schematic](Adafruit-TftDisplayShield-Netduino3.jpg)
+TftDisplayShield is connected as followed on [Fez Duino 3](https://docs.ghielectronics.com/hardware/sitcore/sbc.html#fez-duino):
+![Schematic](Adafruit-TftDisplayShield-FezDuino.jpg)
+
+<aside class="warning">
+As mainboard don't have ICSP connection, three wires must be added as on picture.
+</aside>
 
 
 TftDisplayShield | Mainboard
@@ -20,11 +24,11 @@ TftDisplayShield | Mainboard
 GND              | GND
 I2C              | I2C
 SPI              | SPI
-TFT_DC           | D8
-TFT_CS           | D10
-MOSI (SPI2)      | MOSI
-MISO (SPI2)      | MISO
-SCLK (SPI2)      | SCLK
+TFT_DC           | D8   (PC5)
+TFT_CS           | D10  (PB0)
+MOSI (ICSP)      | MOSI (SPI3/PB5)
+MISO (ICSP)      | MISO (SPI3/PB4)
+SCLK (ICSP)      | SCLK (SPI3/PB3)
 
 
 ## Example of code:
@@ -33,12 +37,11 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
-using GHIElectronics.TinyCLR.Devices.Display;
-using GHIElectronics.TinyCLR.Drawing;
+using Bauland.Adafruit;
 using GHIElectronics.TinyCLR.Native;
-using Bauland.Pins;
+using GHIElectronics.TinyCLR.Pins;
 
-namespace FEZTftShieldDisplay
+namespace TestTftDisplayShield
 {
     internal static class Program
     {
@@ -47,24 +50,20 @@ namespace FEZTftShieldDisplay
         {
             try
             {
-                _shield = new TftDisplayShield(Netduino3.I2cBus.I2c, Netduino3.SpiBus.Spi2,
-                                    Netduino3.GpioPin.D10, Netduino3.GpioPin.D8);
+                _shield = new TftDisplayShield(STM32H7.I2cBus.I2c2, STM32H7.SpiBus.Spi3,
+                    STM32H7.GpioPin.PB0, STM32H7.GpioPin.PC5);
 
-                _shield.SetOrientation(TftDisplayShield.Orientation.Portrait);
-                _shield.GetDisplayControllerProvider.Enable();
+                _shield.SetOrientation(Orientation.Landscape);
                 _shield.SetBackLight(TftDisplayShield.BackLightOn);
                 _shield.OnButtonPressed += _shield_OnButtonRaisedA;
                 _shield.OnButtonReleased += _shield_OnButtonReleased;
 
-                var display = DisplayController.FromProvider(_shield.GetDisplayControllerProvider);
-                display.SetConfiguration(new SpiDisplayControllerSettings { Width = _shield.Width, Height = _shield.Height });
 
-                var screen = Graphics.FromHdc(GraphicsManager.RegisterDrawTarget(new DrawTarget(display)));
-                screen.Clear(Color.Black);
-                screen.Flush();
+                _shield.Screen.Clear();
+                _shield.Screen.Flush();
 
-                var width = display.ActiveConfiguration.Width;
-                var height = display.ActiveConfiguration.Height;
+                var width = _shield.Width;
+                var height = _shield.Height;
                 var color = new Pen(Color.Yellow);
 
                 var rnd = new Random();
@@ -83,10 +82,10 @@ namespace FEZTftShieldDisplay
                     if (x >= width || x < 0) vx *= -1;
                     if (y >= height || y < 0) vy *= -1;
 
-                    screen.Clear(Color.Black);
-                    screen.DrawEllipse(color, x, y, 10, 10);
+                    _shield.Screen.Clear();
+                    _shield.Screen.DrawEllipse(color, x, y, 10, 10);
 
-                    screen.Flush();
+                    _shield.Screen.Flush();
 
                     Thread.Sleep(10);
                 }
@@ -100,17 +99,17 @@ namespace FEZTftShieldDisplay
         private static void DisplayMemoryUsage()
         {
             Trace.WriteLine(
-                            $"Free Ram/Used Ram/Total Ram: {Memory.FreeBytes} / {Memory.UsedBytes} / {Memory.UsedBytes + Memory.FreeBytes}");
+                            $"Free Ram/Used Ram/Total Ram: {Memory.ManagedMemory.FreeBytes} / {Memory.ManagedMemory.UsedBytes} / {Memory.ManagedMemory.UsedBytes + Memory.ManagedMemory.FreeBytes}");
         }
 
         private static void _shield_OnButtonReleased(TftDisplayShield sender, int buttonRaised)
         {
-            Trace.WriteLine("Released: " + TftDisplayShield.Button.ToString(buttonRaised));
+            Trace.WriteLine("Released: " + Button.ToString(buttonRaised));
         }
 
         private static void _shield_OnButtonRaisedA(TftDisplayShield sender, int buttonRaised)
         {
-            Trace.WriteLine("Fired: " + TftDisplayShield.Button.ToString(buttonRaised));
+            Trace.WriteLine("Fired: " + Button.ToString(buttonRaised));
         }
     }
 }

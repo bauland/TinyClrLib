@@ -49,6 +49,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Shared", "_Shared", "{6C7C85BB-0967-4F49-BFA8-4C5D93392E85}"
 	ProjectSection(SolutionItems) = preProject
 		license.txt = license.txt
+		Logo-NuGet.png = Logo-NuGet.png
 		Modules\postbuild.bat = Modules\postbuild.bat
 		Modules\SharedAssemblyInfo.cs = Modules\SharedAssemblyInfo.cs
 	EndProjectSection

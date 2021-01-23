@@ -2,26 +2,32 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.0.1</version>
+    <version>$version$</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <iconUrl>http://www.bauland.fr/Content/img/Logo-NuGet.png</iconUrl>
+    <icon>images\Logo-NuGet.png</icon>
+    <!-- 
+      <iconUrl>http://www.bauland.fr/Content/img/Logo-NuGet.png</iconUrl> 
+    -->
     <projectUrl>https://github.com/bauland/TinyClrLib</projectUrl>
     <language>en-US</language>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release of the package.</releaseNotes>
-    <copyright>Copyright 2017-2019</copyright>
+    <releaseNotes>Version 2 of STIcore.</releaseNotes>
+    <copyright>Copyright 2017-2021</copyright>
     <tags>TinyClr Adafruit Tft display shield</tags>
     <license type="file">license.txt</license>
     <dependencies>
-      <dependency id="GHIElectronics.TinyCLR.Core" version="1.0.0" />
+      <dependency id="GHIElectronics.TinyCLR.Core" version="2.0.0" />
+      <dependency id="GHIElectronics.TinyCLR.Drawing" version="2.0.0" />
+      <dependency id="GHIElectronics.TinyCLR.Drivers.Sitronix.ST7735" version="2.0.0" />
     </dependencies>
   </metadata>
   <files>
     <file src="TftDisplayShield.html" target="" />
-    <file src="Adafruit-TftDisplayShield-Netduino3.jpg" target="" />
+    <file src="Adafruit-TftDisplayShield-FezDuino.jpg" target="" />
     <file src="../../../license.txt" target="license.txt" />
+    <file src="../../../Logo-NuGet.png" target="images\" />
   </files>
 </package>

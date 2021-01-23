@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("N. Bauland")]
-[assembly: AssemblyCopyright("Copyright © Bauland 2017-2019")]
+[assembly: AssemblyCopyright("Copyright © Bauland 2017-2021")]
 [assembly: AssemblyTrademark("N. Bauland")]
 [assembly: AssemblyCulture("")]
 
@@ -25,6 +25,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.10003")]
-[assembly: AssemblyInformationalVersion("1.0.0-rtw")]
+[assembly: AssemblyVersion("2.0.0.0")]
+//[assembly: AssemblyFileVersion("1.0.0.10003")]
+//[assembly: AssemblyInformationalVersion("1.0.0-rtw")]
