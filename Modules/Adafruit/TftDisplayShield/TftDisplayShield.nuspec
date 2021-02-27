@@ -19,9 +19,10 @@
     <tags>TinyClr Adafruit Tft display shield</tags>
     <license type="file">license.txt</license>
     <dependencies>
-      <dependency id="GHIElectronics.TinyCLR.Core" version="2.0.0" />
-      <dependency id="GHIElectronics.TinyCLR.Drawing" version="2.0.0" />
-      <dependency id="GHIElectronics.TinyCLR.Drivers.Sitronix.ST7735" version="2.0.0" />
+      <dependency id="GHIElectronics.TinyCLR.Core" version="2.1.0-preview4" />
+      <dependency id="GHIElectronics.TinyCLR.Drawing" version="2.1.0-preview4" />
+      <dependency id="GHIElectronics.TinyCLR.Drivers.Sitronix.ST7735" version="2.1.0-preview4" />
+      <dependency id="GHIElectronics.TinyCLR.Devices.I2C" version="2.1.0-preview4" />
     </dependencies>
   </metadata>
   <files>

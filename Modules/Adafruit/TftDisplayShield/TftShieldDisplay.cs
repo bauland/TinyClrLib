@@ -10,6 +10,8 @@ using GHIElectronics.TinyCLR.Devices.Spi;
 using GHIElectronics.TinyCLR.Drivers.Sitronix.ST7735;
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable CommentTypo
+// ReSharper disable IdentifierTypo
 
 namespace Bauland.Adafruit
 {
@@ -195,20 +197,17 @@ namespace Bauland.Adafruit
         /// <param name="pinChipSelect">Id of ChipSelect pin (D10)</param>
         /// <param name="pinDataCommand">Id of control pin (D8)</param>
         /// <param name="bgrPanel">if true display is BGR panel, else it is RGB panel</param>
-        public TftDisplayShield(string i2CBus, string spiBus, int pinChipSelect, int pinDataCommand, bool bgrPanel = false) : base(i2CBus, Address)
+        public TftDisplayShield(string i2CBus, string spiBus, GpioPin pinChipSelect, GpioPin pinDataCommand, bool bgrPanel = false) : base(i2CBus, Address)
         {
             _bgrPanel = bgrPanel;
             PinMode(ResetPin, GpioPinDriveMode.Output);
             PinModeBulk(Button.All, GpioPinDriveMode.InputPullUp);
             SetBackLight(BackLightOff);
             ResetTft();
-            var gpioController = GpioController.GetDefault();
-            var dc = gpioController.OpenPin(pinDataCommand);
-            dc.SetDriveMode(GpioPinDriveMode.Output);
             var spi = SpiController.FromName(spiBus);
-            var spiConnectionString = ST7735Controller.GetConnectionSettings(SpiChipSelectType.Gpio, gpioController.OpenPin(pinChipSelect));
+            var spiConnectionString = ST7735Controller.GetConnectionSettings(SpiChipSelectType.Gpio, pinChipSelect);
 
-            _st7735Controller = new ST7735Controller(spi.GetDevice(spiConnectionString), dc);
+            _st7735Controller = new ST7735Controller(spi.GetDevice(spiConnectionString), pinDataCommand);
             _st7735Controller.Enable();
             Graphics.OnFlushEvent += Graphics_OnFlushEvent;
             _oldState = ReadButtons() ^ Button.All;
@@ -224,7 +223,7 @@ namespace Bauland.Adafruit
                 OnButtonReleased?.Invoke(this, buttonId);
         }
 
-        private void Graphics_OnFlushEvent(IntPtr hdc, byte[] data)
+        private void Graphics_OnFlushEvent(Graphics graphics , byte[] data, int x ,int y,int width,int height ,int originalWidth)
         {
             _st7735Controller.DrawBuffer(data);
         }
