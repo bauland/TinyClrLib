@@ -55,28 +55,28 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GHIElectronics.TinyCLR.Core">
-      <Version>2.1.0-preview4</Version>
+      <Version>2.1.0-rc1</Version>
     </PackageReference>
     <PackageReference Include="GHIElectronics.TinyCLR.Devices.Display">
-      <Version>2.1.0-preview4</Version>
+      <Version>2.1.0-rc1</Version>
     </PackageReference>
     <PackageReference Include="GHIElectronics.TinyCLR.Devices.Gpio">
-      <Version>2.1.0-preview4</Version>
+      <Version>2.1.0-rc1</Version>
     </PackageReference>
     <PackageReference Include="GHIElectronics.TinyCLR.Devices.I2c">
-      <Version>2.1.0-preview4</Version>
+      <Version>2.1.0-rc1</Version>
     </PackageReference>
     <PackageReference Include="GHIElectronics.TinyCLR.Devices.Spi">
-      <Version>2.1.0-preview4</Version>
+      <Version>2.1.0-rc1</Version>
     </PackageReference>
     <PackageReference Include="GHIElectronics.TinyCLR.Drawing">
-      <Version>2.1.0-preview4</Version>
+      <Version>2.1.0-rc1</Version>
     </PackageReference>
     <PackageReference Include="GHIElectronics.TinyCLR.Drivers.Sitronix.ST7735">
-      <Version>2.1.0-preview4</Version>
+      <Version>2.1.0-rc1</Version>
     </PackageReference>
     <PackageReference Include="GHIElectronics.TinyCLR.Native">
-      <Version>2.1.0-preview4</Version>
+      <Version>2.1.0-rc1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
